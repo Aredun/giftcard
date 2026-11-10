@@ -364,6 +364,36 @@
   color: var(--danger-700);
 }
 
+/* Explanation "How the selection works" (native <details>, tokens only; not yet in DESIGN_GUIDELINE) */
+.explain {
+  max-width: var(--measure);
+  margin-top: var(--space-4);
+  border: var(--border-thin) solid var(--line);
+  border-radius: var(--radius-box);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: var(--fs-meta);
+}
+
+.explain summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--target-min);
+  padding: var(--space-2) var(--space-4);
+  color: var(--navy-800);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+}
+
+.explain summary:focus-visible {
+  outline: var(--border-strong) solid var(--cranberry-700);
+  outline-offset: var(--focus-offset);
+}
+
+.explain p {
+  padding: 0 var(--space-4) var(--space-3);
+}
+
 /* 3.10 Code box (state C) */
 .codebox {
   display: flex;

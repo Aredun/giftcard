@@ -106,7 +106,7 @@
 
             <div id="crypto-error" class="notice notice--error" role="alert" hidden>
               <svg class="icon" aria-hidden="true"><use href="assets/ui-icons.svg#icon-shield"/></svg>
-              <p data-i18n="crypto_error">Este navegador no puede calcular el código de forma segura (falta Web Crypto). Abre la página en un navegador actual como Firefox, Chrome, Edge o Safari.</p>
+              <p data-i18n="crypto_error">A este navegador le falta la función necesaria para calcular el código (Web Crypto). Abre la página en un navegador actual como Firefox, Chrome, Edge o Safari.</p>
             </div>
 
             <div class="actions">
@@ -118,6 +118,14 @@
           <div class="notice">
             <p data-i18n="email_notice">El código no confirma ninguna identidad ni impide selecciones múltiples.</p>
           </div>
+
+          <details class="explain">
+            <summary data-i18n="explain_title">Cómo funciona la selección</summary>
+            <p data-i18n="explain_local">Tu correo electrónico solo se procesa en tu navegador para calcular el código; esta página no lo guarda ni lo envía. El alojamiento de la página (GitHub Pages) sí ve las solicitudes normales de la página, como ocurre en cualquier sitio web, pero nunca tu correo electrónico.</p>
+            <p data-i18n="explain_nocheck">Esta página estática no tiene lista de empleados, base de datos ni inicio de sesión. No puede comprobar si un correo electrónico pertenece a una persona de la plantilla. El código no es una prueba de identidad ni de seguridad.</p>
+            <p data-i18n="explain_limits">La página no puede impedir ni hacer cumplir técnicamente las selecciones múltiples, los cambios posteriores ni los plazos.</p>
+            <p data-i18n="explain_process">Envía el código solo por el canal indicado por ULTEBRA. Si se reciben varios envíos, decide el proceso interno de ULTEBRA cuál se tiene en cuenta; los cambios y los plazos los gestiona ULTEBRA de forma organizativa.</p>
+          </details>
         </section>
 
         <section id="state-result" class="state" aria-labelledby="result-heading" hidden>
@@ -139,6 +147,14 @@
           <div class="notice">
             <p data-i18n="result_notice">El código sirve para la asignación, no como prueba de identidad ni de seguridad.</p>
           </div>
+
+          <details class="explain">
+            <summary data-i18n="explain_title">Cómo funciona la selección</summary>
+            <p data-i18n="explain_local">Tu correo electrónico solo se procesa en tu navegador para calcular el código; esta página no lo guarda ni lo envía. El alojamiento de la página (GitHub Pages) sí ve las solicitudes normales de la página, como ocurre en cualquier sitio web, pero nunca tu correo electrónico.</p>
+            <p data-i18n="explain_nocheck">Esta página estática no tiene lista de empleados, base de datos ni inicio de sesión. No puede comprobar si un correo electrónico pertenece a una persona de la plantilla. El código no es una prueba de identidad ni de seguridad.</p>
+            <p data-i18n="explain_limits">La página no puede impedir ni hacer cumplir técnicamente las selecciones múltiples, los cambios posteriores ni los plazos.</p>
+            <p data-i18n="explain_process">Envía el código solo por el canal indicado por ULTEBRA. Si se reciben varios envíos, decide el proceso interno de ULTEBRA cuál se tiene en cuenta; los cambios y los plazos los gestiona ULTEBRA de forma organizativa.</p>
+          </details>
 
           <div class="actions">
             <button id="reset" class="btn btn--secondary" type="button" data-i18n="reset">Elegir otra opción</button>

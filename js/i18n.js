@@ -70,9 +70,9 @@ export const TEXTS = Object.freeze({
     es: 'Revisa el correo electrónico: necesita exactamente una «@» y un dominio como nombre@empresa.com.',
   },
   crypto_error: {
-    de: 'Dieser Browser kann den Code nicht sicher berechnen (Web Crypto fehlt). Bitte öffne die Seite in einem aktuellen Browser wie Firefox, Chrome, Edge oder Safari.',
-    en: 'This browser cannot compute the code securely (Web Crypto is missing). Please open the page in a current browser such as Firefox, Chrome, Edge or Safari.',
-    es: 'Este navegador no puede calcular el código de forma segura (falta Web Crypto). Abre la página en un navegador actual como Firefox, Chrome, Edge o Safari.',
+    de: 'Diesem Browser fehlt die Funktion, die zur Berechnung des Codes nötig ist (Web Crypto). Bitte öffne die Seite in einem aktuellen Browser wie Firefox, Chrome, Edge oder Safari.',
+    en: 'This browser lacks the function needed to compute the code (Web Crypto). Please open the page in a current browser such as Firefox, Chrome, Edge or Safari.',
+    es: 'A este navegador le falta la función necesaria para calcular el código (Web Crypto). Abre la página en un navegador actual como Firefox, Chrome, Edge o Safari.',
   },
   email_notice: {
     de: 'Der Code bestätigt keine Identität und verhindert keine Mehrfachauswahl.',
@@ -99,6 +99,29 @@ export const TEXTS = Object.freeze({
     de: 'Der Code dient der Zuordnung, nicht als Identitäts- oder Sicherheitsnachweis.',
     en: 'The code is used for matching only, not as proof of identity or security.',
     es: 'El código sirve para la asignación, no como prueba de identidad ni de seguridad.',
+  },
+
+  // Explanation "How the selection works" (DESIGN_SPEC 9, extended version; DECISIONS S1: EN and ES are drafts)
+  explain_title: { de: 'So funktioniert die Auswahl', en: 'How the selection works', es: 'Cómo funciona la selección' },
+  explain_local: {
+    de: 'Deine E-Mail-Adresse wird nur in deinem Browser verarbeitet, um den Code zu berechnen; diese Seite speichert oder sendet sie nicht. Der Server, auf dem die Seite liegt (GitHub Pages), sieht wie bei jeder Webseite die normalen Seitenaufrufe, aber nie deine E-Mail-Adresse.',
+    en: 'Your email address is only processed in your browser to compute the code; this page does not store or send it. The host of the page (GitHub Pages) sees the normal page requests, as with any website, but never your email address.',
+    es: 'Tu correo electrónico solo se procesa en tu navegador para calcular el código; esta página no lo guarda ni lo envía. El alojamiento de la página (GitHub Pages) sí ve las solicitudes normales de la página, como ocurre en cualquier sitio web, pero nunca tu correo electrónico.',
+  },
+  explain_nocheck: {
+    de: 'Diese statische Seite besitzt keine Mitarbeiterliste, Datenbank oder Anmeldung. Sie kann nicht feststellen, ob eine E-Mail-Adresse zu einer beschäftigten Person gehört. Der Code ist kein Identitäts- oder Sicherheitsnachweis.',
+    en: 'This static page has no employee list, database or login. It cannot tell whether an email address belongs to an employee. The code is not proof of identity or security.',
+    es: 'Esta página estática no tiene lista de empleados, base de datos ni inicio de sesión. No puede comprobar si un correo electrónico pertenece a una persona de la plantilla. El código no es una prueba de identidad ni de seguridad.',
+  },
+  explain_limits: {
+    de: 'Die Seite kann Mehrfachauswahlen, nachträgliche Änderungen und Fristen nicht technisch verhindern oder durchsetzen.',
+    en: 'The page cannot technically prevent or enforce multiple selections, later changes or deadlines.',
+    es: 'La página no puede impedir ni hacer cumplir técnicamente las selecciones múltiples, los cambios posteriores ni los plazos.',
+  },
+  explain_process: {
+    de: 'Sende den Code nur über den von ULTEBRA bekanntgegebenen Kanal. Bei mehreren Einsendungen entscheidet der interne ULTEBRA-Prozess, welche berücksichtigt wird; Änderungen und Fristen regelt ULTEBRA organisatorisch.',
+    en: 'Send the code only through the channel announced by ULTEBRA. If several submissions arrive, the internal ULTEBRA process decides which one counts; changes and deadlines are handled by ULTEBRA organisationally.',
+    es: 'Envía el código solo por el canal indicado por ULTEBRA. Si se reciben varios envíos, decide el proceso interno de ULTEBRA cuál se tiene en cuenta; los cambios y los plazos los gestiona ULTEBRA de forma organizativa.',
   },
 
   // Footer: short privacy text (DESIGN_SPEC 9)
