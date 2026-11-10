@@ -364,7 +364,7 @@
   color: var(--danger-700);
 }
 
-/* Explanation "How the selection works" (native <details>, tokens only; not yet in DESIGN_GUIDELINE) */
+/* 3.17 Explanation "How the selection works" (native <details>) */
 .explain {
   max-width: var(--measure);
   margin-top: var(--space-4);
@@ -376,18 +376,11 @@
 }
 
 .explain summary {
-  display: flex;
-  align-items: center;
   min-height: var(--target-min);
   padding: var(--space-2) var(--space-4);
   color: var(--navy-800);
   font-weight: var(--fw-bold);
   cursor: pointer;
-}
-
-.explain summary:focus-visible {
-  outline: var(--border-strong) solid var(--cranberry-700);
-  outline-offset: var(--focus-offset);
 }
 
 .explain p {
