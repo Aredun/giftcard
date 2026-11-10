@@ -207,20 +207,24 @@
   stroke-dashoffset: 0;
 }
 
-/* Placement. The envelope is held in front of Santa's envelope hand: its right edge at the right edge of Santa's own
-   envelope (42 % of the figure width), its centre at 30 % of the figure height (DESIGN_GUIDELINE 3.16). Deviation
-   (AB#254): 3.16 puts the right edge at the area's left edge (24 %); in the desktop column (about 460 px) that leaves
-   about 110 px, less than --envelope-w, so the envelope would sit on the column edge and the light trail would have
-   no length. The figure is drawn with object-fit: contain, right bottom, so its size follows from the column
-   (container units) and the image ratio 384 x 498 (0.771 wide per high, 1.297 high per wide). The envelope never
-   leaves the column. */
+/* Placement (DESIGN_GUIDELINE 3.16). The envelope is held in front of Santa's envelope hand: its right edge at the
+   right edge of Santa's own envelope (42 % of the figure width), its centre at 30 % of the figure height, but its top
+   edge never above the figure's top 25 % (face and beard). The figure is drawn with object-fit: contain, right bottom,
+   so its size follows from the column (container units) and the image ratio 384 x 498 (0.771 wide per high, 1.297
+   high per wide); the rendered figure starts at --figure-top, not at the top of the box. The envelope is 0.7 as high
+   as wide (160 x 112), so half its height is 0.35 of its width. The envelope never leaves the column. */
 .envelope-anchor {
+  --anchor-w: var(--envelope-w);
   --figure-w: min(100cqw, 77.1cqh);
   --figure-h: min(129.7cqw, 100cqh);
+  --figure-top: calc(100cqh - var(--figure-h));
   position: absolute;
-  top: calc(100cqh - var(--figure-h) * 0.7);
-  right: min(calc(var(--figure-w) * 0.58), calc(100cqw - var(--envelope-w)));
-  width: var(--envelope-w);
+  top: max(
+    calc(var(--figure-top) + var(--figure-h) * 0.3),
+    calc(var(--figure-top) + var(--figure-h) * 0.25 + var(--anchor-w) * 0.35)
+  );
+  right: min(calc(var(--figure-w) * 0.58), calc(100cqw - var(--anchor-w)));
+  width: var(--anchor-w);
   transform: translateY(-50%);
 }
 
@@ -270,17 +274,21 @@
   }
 }
 
-/* Mobile: Santa is centred at 40 % width after the content (layout.css); the envelope sits left of his envelope hand,
-   no trail (no side-by-side relation, DESIGN_GUIDELINE 6.4). Below 768 the label of the switch is visually hidden. */
+/* Mobile: Santa is centred at 40 % width after the content, at the top of the column (layout.css); the envelope sits
+   next to him on the left, its right edge at the figure's left edge (30 % of the column), top edge on the figure's
+   25 % line, so it lies at the height of his hand and never over face or beard. No trail (no side-by-side relation,
+   DESIGN_GUIDELINE 6.4). Below 768 the label of the switch is visually hidden. */
 @media (width < 768px) {
   .decor {
     container-type: inline-size;
   }
 
   .envelope-anchor {
-    top: calc(129.7cqw * 0.4 * 0.3);
-    right: min(calc(100cqw - 30cqw - 40cqw * 0.42), calc(100cqw - var(--envelope-w-sm)));
-    width: var(--envelope-w-sm);
+    --anchor-w: var(--envelope-w-sm);
+    --figure-w: 40cqw;
+    --figure-h: calc(40cqw * 1.297);
+    --figure-top: 0cqw;
+    right: min(calc(50cqw + var(--figure-w) / 2), calc(100cqw - var(--anchor-w)));
   }
 
   .seal {
@@ -298,6 +306,7 @@
     display: none;
   }
 
+  /* Same pattern as .visually-hidden (base.css); a utility class cannot be applied per breakpoint in plain CSS */
   .motion-toggle__label {
     position: absolute;
     width: 1px;

@@ -44,8 +44,9 @@ export function play(element, className) {
   if (!element) return false;
   stop(element);
   if (!isMotionOn(element.ownerDocument)) return false;
-  // Reading offsetWidth restarts the CSS animation when the same class is added again.
-  void element.offsetWidth;
+  // A forced layout read restarts the CSS animation when the same class is added again. getBoundingClientRect works for
+  // HTML and SVG elements alike (an SVG element has no offsetWidth, so reading that would not flush).
+  element.getBoundingClientRect();
   element.classList.add(className);
   playing.set(element, className);
   // The same function reference is registered only once per element, however often it plays.

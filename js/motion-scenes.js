@@ -61,7 +61,8 @@ export function createScenes(elements) {
     }
     play(art(card), 'is-wiggling');
     play(check(card), 'is-stamped');
-    play(santa, 'is-hopping');
+    // During the entrance Santa is still greeting: a hop there would replace his arrival and replay it when it ends.
+    if (!panel.classList.contains('is-arriving')) play(santa, 'is-hopping');
   }
 
   // 6.3 The chosen card's image position, measured before page 1 is hidden (null with motion off).
@@ -72,15 +73,28 @@ export function createScenes(elements) {
     return width > 0 ? { left, top, width } : null;
   }
 
+  // Rectangle of an element inside the page-2 section as it will rest: the section starts its fade shifted down by
+  // --shift-state (motion.css), so its current vertical offset is taken back out.
+  function settledRect(element) {
+    const rect = element.getBoundingClientRect();
+    const moving = element.closest?.('.is-entering');
+    const view = doc.defaultView;
+    if (!moving || !view?.getComputedStyle || !view.DOMMatrixReadOnly) return rect;
+    const { transform } = view.getComputedStyle(moving);
+    if (!transform || transform === 'none') return rect;
+    const shift = new view.DOMMatrixReadOnly(transform).m42;
+    return { left: rect.left, top: rect.top - shift, width: rect.width, height: rect.height };
+  }
+
   // 6.3 FLIP copy of the motif from the card to the summary image. It starts above the form (clamped) and is a
   // child of the panel, so it never covers the field or the buttons; "Change" is drawn above it (motion.css).
   function flyTransfer(from) {
-    const to = summaryImage.getBoundingClientRect();
+    const to = settledRect(summaryImage);
     if (!to.width) return;
     const box = panel.getBoundingClientRect();
     const scale = from.width / to.width;
     const startHeight = to.height * scale;
-    const formTop = form ? form.getBoundingClientRect().top : Infinity;
+    const formTop = form ? settledRect(form).top : Infinity;
     const startTop = Math.min(from.top, formTop - startHeight);
 
     const copy = doc.createElement('img');
@@ -107,7 +121,7 @@ export function createScenes(elements) {
   function drawTrail() {
     const box = decor.getBoundingClientRect();
     if (!box.width || !box.height || !summary) return;
-    const row = summary.getBoundingClientRect();
+    const row = settledRect(summary);
     const startY = row.top + row.height / 2 - box.top;
     decor.style.setProperty('--summary-y', px(Math.max(0, startY)));
     if (!envelope || !trail || !trailPath) return;
