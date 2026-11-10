@@ -1,0 +1,78 @@
+/*
+ * Giftcard2 design tokens – the only place for colour, type, radius and shadow values.
+ * Source: concept/requirements/DESIGN_SPEC.md 5 (shadow and spacing values from MASTER_DESIGN.html).
+ * Other stylesheets use only var(--…) from this file.
+ */
+:root {
+  /* Colours – DESIGN_SPEC 5 "Farben" */
+  --navy-950: #10192B;      /* main text, footer, dark surfaces */
+  --navy-800: #233654;      /* secondary text, selected card */
+  --ivory-50: #FFF9EE;      /* page background */
+  --paper: #FFFCF7;         /* panel, cards */
+  --cranberry-700: #8E2940; /* primary action, focus accent */
+  --cranberry-800: #6F1E31; /* hover, pressed */
+  --pine-700: #285B48;      /* success, calm accents */
+  --gold-500: #C99A42;      /* sparse ornamental lines, never body text */
+  --danger-700: #A5262F;    /* errors with icon and text */
+
+  /* Semantic aliases */
+  --color-bg: var(--ivory-50);
+  --color-surface: var(--paper);
+  --color-text: var(--navy-950);
+  --color-text-muted: var(--navy-800);
+  --color-primary: var(--cranberry-700);
+  --color-primary-active: var(--cranberry-800);
+  --color-success: var(--pine-700);
+  --color-ornament: var(--gold-500);
+  --color-danger: var(--danger-700);
+  --color-on-dark: var(--paper);
+  --color-focus: var(--cranberry-700);
+  --color-focus-halo: var(--paper);
+
+  /* Type – DESIGN_SPEC 5 "Typografie" (no external fonts; Inter only if a licensed local file is delivered) */
+  --font-heading: Georgia, Cambria, "Times New Roman", serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-code: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --font-size-h1: clamp(2.125rem, 1.25rem + 2.8vw, 3.5rem); /* 34–40 px mobile … 48–56 px desktop */
+  --font-size-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* 16–18 px */
+  --font-size-form: 1rem;                                     /* at least 16 px in forms */
+  --font-size-small: 0.875rem;
+  --line-height-body: 1.55;
+  --line-height-heading: 1.12;
+  --font-weight-strong: 700;
+  --measure: 68ch;                                            /* max text width */
+
+  /* Radius – DESIGN_SPEC 5 "Form und Tiefe" */
+  --radius-panel: 28px;
+  --radius-card: 18px;
+  --radius-pill: 999px;
+
+  /* Borders and shadow */
+  --border-hairline: 1px;
+  --border-selected: 3px;
+  --shadow-panel: 0 24px 70px rgb(16 25 43 / 14%); /* soft shadow, navy-950 at 14 % */
+
+  /* Sizes */
+  --panel-max-width: 1120px;
+  --button-min-height: 48px;
+  --touch-target-min: 44px;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 3px;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-gutter: clamp(1rem, 4vw, 4.5rem);
+
+  /* Motion – DESIGN_SPEC 7 */
+  --duration-panel: 200ms;
+  --duration-check: 140ms;
+  --duration-confetti-max: 900ms;
+  --duration-reduced-max: 90ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+}

@@ -1,0 +1,191 @@
+/*
+ * Giftcard2 base: reset, system font stacks, focus ring, landmarks, safe areas.
+ * Values only from tokens.css. Source: DESIGN_SPEC 5, 6, 11.
+ */
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body,
+h1,
+h2,
+h3,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ul,
+ol {
+  margin: 0;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg,
+picture {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+input,
+textarea,
+select {
+  font-size: max(var(--font-size-form), 1em);
+}
+
+button {
+  cursor: pointer;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Typography */
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  line-height: var(--line-height-heading);
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+}
+
+p {
+  max-width: var(--measure);
+}
+
+code,
+kbd,
+samp {
+  font-family: var(--font-code);
+}
+
+a {
+  color: var(--color-primary);
+}
+
+a:hover {
+  color: var(--color-primary-active);
+}
+
+/* Focus ring: at least 3 px, high contrast on light and dark surfaces */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: 0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--color-focus-halo);
+}
+
+/* Landmarks and safe areas */
+.site-header,
+.site-main,
+.site-footer {
+  width: 100%;
+  padding-left: max(var(--space-gutter), env(safe-area-inset-left));
+  padding-right: max(var(--space-gutter), env(safe-area-inset-right));
+}
+
+.site-header {
+  padding-top: max(var(--space-4), env(safe-area-inset-top));
+  padding-bottom: var(--space-4);
+}
+
+.site-main {
+  flex: 1 0 auto;
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-6);
+}
+
+.site-footer {
+  padding-top: var(--space-5);
+  padding-bottom: max(var(--space-5), env(safe-area-inset-bottom));
+  background: var(--navy-950);
+  color: var(--color-on-dark);
+  font-size: var(--font-size-small);
+}
+
+.wordmark {
+  font-weight: var(--font-weight-strong);
+  letter-spacing: 0.04em;
+}
+
+/* Utilities */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.notice {
+  max-width: var(--measure);
+  padding: var(--space-4) var(--space-5);
+  border: var(--border-hairline) solid var(--color-ornament);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
+.notice p + p {
+  margin-top: var(--space-2);
+}
+
+/* Reduced motion: states switch at once */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
