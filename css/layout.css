@@ -67,6 +67,32 @@ body {
   min-width: 0;
 }
 
+/* V9 Desktop: the three steps share one grid cell and the hidden ones keep their space invisibly, so the panel always
+   has the height of the tallest step and the footer stays in place; shorter steps get more paper below the content.
+   visibility: hidden keeps a hidden step out of the tab order, the accessibility tree and pointer events, exactly as
+   display: none (base.css [hidden]) does below 1024 px. */
+@media (width >= 1024px) {
+  .content {
+    display: grid;
+    align-content: start;
+  }
+
+  .content > .state {
+    grid-area: 1 / 1;
+    min-width: 0;
+  }
+
+  .content > .state[hidden] {
+    display: block !important;
+    visibility: hidden;
+  }
+
+  /* An explanation opened on another step does not count towards the shared height (only the steps' base content) */
+  .content > .state[hidden] .explain > :not(summary) {
+    display: none;
+  }
+}
+
 /* 3.14 Decoration column: spans the full panel height down to the panel edge (the figure stands on it); the images
    are positioned inside it, so they never make the panel taller than its content and never lie behind a button. */
 .decor {

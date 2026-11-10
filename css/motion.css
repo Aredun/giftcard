@@ -271,7 +271,7 @@
   }
 }
 
-/* 200-450 ms: Santa's small hop (beats the entrance if a card is chosen while he arrives) */
+/* 200-450 ms: Santa's small hop, only after the entrance (motion-scenes.js select) */
 :root[data-motion="on"] .panel .decor__santa.is-hopping {
   animation: santa-hop var(--dur-select) var(--ease-out);
 }

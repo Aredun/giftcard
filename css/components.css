@@ -181,8 +181,10 @@
   visibility: hidden;
 }
 
+/* inherit, not visible: on desktop a hidden step stays in the layout with visibility: hidden (layout.css, V9), and
+   "visible" would show this hint through it */
 .gift-card[aria-checked="true"] .gift-card__hint-selected {
-  visibility: visible;
+  visibility: inherit;
 }
 
 /* Check badge on the card's top-right corner, centred on the corner of the padding box, so it never covers the image
@@ -429,6 +431,8 @@
   letter-spacing: 0.04em;
   overflow-wrap: anywhere;
   user-select: all;
+  /* Reserves the code's line while it is still empty, so the result step is already as tall as it will be (V9) */
+  min-height: 1lh;
 }
 
 /* 3.11 Status line: reserves one line so the copy result does not move other content */
