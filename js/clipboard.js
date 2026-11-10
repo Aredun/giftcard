@@ -1,6 +1,7 @@
 // Copy the code (R25, DESIGN_SPEC 3 C, 10; DESIGN_GUIDELINE 3.10, 3.11).
 // Success: button label "copied" and a spoken status line for at least 2 s. No clipboard or refused: the code is
 // focused and selected and "please copy manually" is announced. Texts come from the caller (i18n.js).
+// onCopied runs after a successful copy only (decorative stamp of motion-scenes.js; a failed copy has no motion).
 // Nothing is stored or logged.
 
 const COPIED_VISIBLE_MS = 2500;
@@ -15,7 +16,7 @@ export function selectText(element) {
   selection.addRange(range);
 }
 
-export function createCopyControl({ button, label, codeElement, okLine, manualLine, texts }) {
+export function createCopyControl({ button, label, codeElement, okLine, manualLine, texts, onCopied = () => {} }) {
   let timer = null;
   let announceTimer = null;
 
@@ -70,7 +71,10 @@ export function createCopyControl({ button, label, codeElement, okLine, manualLi
       showCopied();
     } catch {
       showManual();
+      return;
     }
+    // Outside the try: the decoration can never turn a successful copy into the manual notice.
+    onCopied();
   }
 
   // After a language switch: the label in the new language, "copied" only while the success state is still showing.

@@ -84,11 +84,47 @@
   --field-max: 36rem;
   --codebox-max: 41rem;
 
-  /* 2.5 Motion */
-  --dur-state: 200ms;
-  --dur-check: 140ms;
+  /* 2.5 Motion (AB#253): durations are the total of a sequence incl. stagger (MOTION_ADDENDUM §1) */
   --dur-fast: 90ms;
+  --dur-check: 140ms;
+  --dur-state: 200ms;
+  --dur-hover: 200ms;
+  --dur-copy: 200ms;
+  --dur-transfer: 420ms;
+  --dur-select: 450ms;
+  --dur-reveal: 700ms;
+  --dur-seal: 700ms;
+  --dur-envelope: 800ms;
   --dur-finale: 900ms;
+  --dur-entry: 1000ms;
+  --dur-email-entry: 1100ms;
+  --stagger: 100ms;
+  --dur-breath: 1600ms;
+  --dur-idle: 8000ms;
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-pop: cubic-bezier(0.34, 1.4, 0.5, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
   --shift-state: 8px;
+  --shift-entry: 12px;
+  --shift-santa: 32px;
+  --lift-card: 4px;
+  --hop-santa: 8px;
+  --tilt-santa: 3deg;
+  --tilt-gift: 3deg;
+  --scale-stamp: 1.4;
+  --tilt-stamp: -12deg;
+  --scale-breath: 1.012;
+  --lid-open: -24deg;
+  --seal-open: 28deg;
+
+  /* 2.5 Sizes of the workshop props (3.16) and the animation switch (3.15) */
+  --envelope-w: 144px;
+  --envelope-w-sm: 96px;
+  --seal-size: 40px;
+  --seal-size-sm: 28px;
+  --gift-w: 144px;
+  --gift-w-sm: 112px;
+  --switch-track-w: 40px;
+  --switch-track-h: 24px;
+  --switch-knob: 16px;
 }

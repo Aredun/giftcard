@@ -23,6 +23,15 @@ export const TEXTS = Object.freeze({
 
   // Header and progress
   lang_label: { de: 'Sprache', en: 'Language', es: 'Idioma' },
+  // Animation switch, verbatim from MOTION_ADDENDUM §2 (DECISIONS V6)
+  motion_label: { de: 'Animationen', en: 'Animations', es: 'Animaciones' },
+  motion_on: { de: 'An', en: 'On', es: 'Activadas' },
+  motion_off: { de: 'Aus', en: 'Off', es: 'Desactivadas' },
+  motion_system_help: {
+    de: 'Animationen sind aufgrund der Systemeinstellung für reduzierte Bewegung ausgeschaltet.',
+    en: 'Animations are off because your system requests reduced motion.',
+    es: 'Las animaciones están desactivadas por el ajuste de movimiento reducido de tu sistema.',
+  },
   progress_label: { de: 'Fortschritt', en: 'Progress', es: 'Progreso' },
   step_choose: { de: 'Auswahl', en: 'Selection', es: 'Elección' },
   step_email: { de: 'E-Mail', en: 'Email', es: 'Correo' },

@@ -1,11 +1,13 @@
 // Gift card selection as an ARIA radio group (DESIGN_SPEC 11, DESIGN_GUIDELINE 3.5, 5.2).
 // Roving tabindex: exactly one radio is tabbable (the checked one, else the first). Arrow keys move focus and
 // check with wrap, Home / End jump, Space checks the focused radio, click checks. No storage, no DOM creation.
+// onChange(id) runs when the checked card changes, onCheck(radio, radios) on every check, also of the same card
+// (the decorative selection reaction of motion-scenes.js may replay).
 
 const NEXT_KEYS = new Set(['ArrowRight', 'ArrowDown']);
 const PREVIOUS_KEYS = new Set(['ArrowLeft', 'ArrowUp']);
 
-export function createRadioGroup(groupElement, onChange) {
+export function createRadioGroup(groupElement, onChange, onCheck = () => {}) {
   const radios = Array.from(groupElement.querySelectorAll('[role="radio"]'));
 
   function checkedIndex() {
@@ -25,6 +27,7 @@ export function createRadioGroup(groupElement, onChange) {
     updateTabStops();
     if (focus) radios[index].focus();
     if (previous !== index) onChange(radios[index].dataset.giftcardId);
+    onCheck(radios[index], radios);
   }
 
   function onKeyDown(event) {

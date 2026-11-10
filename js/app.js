@@ -8,7 +8,8 @@ import { createRadioGroup } from './radio-group.js';
 import { checkEmail, createEmailField, EMAIL_PROBLEMS } from './email.js';
 import { createCopyControl } from './clipboard.js';
 import { applyLanguage, detectLanguage, translate } from './i18n.js';
-import { celebrate, clearCelebration, enterState, initMotion } from './motion.js';
+import { enterState, initMotion } from './motion.js';
+import { createScenes } from './motion-scenes.js';
 
 const browserLanguages = globalThis.navigator?.languages;
 let language = detectLanguage(browserLanguages?.length ? browserLanguages : [globalThis.navigator?.language]);
@@ -29,7 +30,6 @@ const headings = {
 };
 const steps = Array.from(document.querySelectorAll('.progress__step'));
 const panel = document.querySelector('.panel');
-const confetti = document.querySelector('.confetti');
 const continueButton = byId('continue');
 const form = byId('email-form');
 const input = byId('email');
@@ -37,9 +37,31 @@ const generateButton = byId('generate');
 const cryptoError = byId('crypto-error');
 const codeElement = byId('code-value');
 
-const radioGroup = createRadioGroup(document.querySelector('.cards[role="radiogroup"]'), () => {
-  continueButton.disabled = false;
+// Workshop motion (DESIGN_GUIDELINE 6): decorative only, never awaited – focus, status and code never wait for it.
+const scenes = createScenes({
+  panel,
+  decor: document.querySelector('.decor'),
+  santa: document.querySelector('.decor__santa'),
+  summary: document.querySelector('.summary'),
+  summaryImage: byId('summary-img'),
+  form,
+  envelope: document.querySelector('.envelope'),
+  trail: document.querySelector('.trail'),
+  trailPath: document.querySelector('.trail__path'),
+  codebox: document.querySelector('.codebox'),
+  copyIcon: document.querySelector('#copy-ok .icon'),
+  confetti: document.querySelector('.confetti'),
 });
+// Sets <html data-motion> at once from the switch and the system setting; the choice is kept only in memory.
+initMotion({ toggle: byId('motion-toggle'), help: byId('motion-help'), onStop: () => scenes.reset() });
+
+const radioGroup = createRadioGroup(
+  document.querySelector('.cards[role="radiogroup"]'),
+  () => {
+    continueButton.disabled = false;
+  },
+  (card, cards) => scenes.select(card, cards),
+);
 
 const emailField = createEmailField({
   input,
@@ -54,6 +76,7 @@ const copyControl = createCopyControl({
   codeElement,
   okLine: byId('copy-ok'),
   manualLine: byId('copy-manual'),
+  onCopied: () => scenes.copied(),
   texts: {
     get copy() {
       return t('copy');
@@ -104,8 +127,9 @@ function showState(name, { focus = true } = {}) {
   if (focus) headings[name].focus();
   if (!changed) return;
   enterState(sections[name]);
-  if (name === 'result') celebrate(confetti);
-  else clearCelebration(confetti);
+  // Page 2 starts its own sequence in goToEmail (it needs the card's position measured before page 1 is hidden).
+  if (name === 'result') scenes.finale();
+  else if (name === 'choose') scenes.reset();
 }
 
 function showSummary(card) {
@@ -118,7 +142,9 @@ function goToEmail() {
   if (!card) return;
   showSummary(card);
   cryptoError.hidden = isWebCryptoAvailable();
+  const from = scenes.measure(document.querySelector('.gift-card[aria-checked="true"]'));
   showState('email');
+  scenes.enterEmail(from);
 }
 
 function setBusy(value) {
@@ -207,5 +233,5 @@ window.addEventListener('pageshow', (event) => {
 });
 
 setLanguage(language);
-initMotion();
 resetAll({ focus: false });
+scenes.arrive();

@@ -185,10 +185,13 @@
   visibility: visible;
 }
 
+/* Check badge on the card's top-right corner, centred on the corner of the padding box, so it never covers the image
+   (it ends before the padding does) and is drawn above the image wrapper (DECISIONS V8) */
 .gift-card__check {
   position: absolute;
-  top: var(--space-2);
-  right: var(--space-2);
+  top: calc(var(--check-size) / -2);
+  right: calc(var(--check-size) / -2);
+  z-index: 1;
   display: none;
   align-items: center;
   justify-content: center;
@@ -201,6 +204,19 @@
 
 .gift-card[aria-checked="true"] .gift-card__check {
   display: inline-flex;
+}
+
+/* Three cards side by side: brand name and hint centred in each card (DECISIONS V8); stacked cards keep the text
+   left-aligned next to the image */
+@media (width >= 1024px) {
+  .gift-card__name {
+    text-align: center;
+  }
+
+  .gift-card__hint {
+    justify-items: center;
+    text-align: center;
+  }
 }
 
 /* 3.6 Buttons */

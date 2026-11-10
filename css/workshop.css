@@ -1,0 +1,324 @@
+/*
+ * Giftcard2 workshop pieces (DESIGN_GUIDELINE 3.1, 3.5, 3.15, 3.16; AB#254): header controls with the animation switch,
+ * the clipping wrapper of a gift card image, and the resting picture of the inline props (envelope, seal, opening gift,
+ * light trail) in the decoration column. Resting picture = end state of every animation, so without motion
+ * (switch off, system reduction, no JS) everything is complete. How things move is only in motion.css.
+ * Values only from tokens.css; the few plain numbers are proportions of the drawings (noted where used).
+ */
+
+/* 3.1 Header controls: animation switch and language switch, each on its own chip, right of the brand */
+.header-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+/* 3.15 Animation switch: the whole label is the target; the native checkbox is the track, its ::before the knob */
+.motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: var(--target-min);
+  min-height: calc(var(--target-min) + var(--space-1) * 2);
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--overlay);
+  color: var(--on-dark);
+  font-size: var(--fs-meta);
+  cursor: pointer;
+}
+
+.motion-toggle__input {
+  position: relative;
+  flex: none;
+  width: var(--switch-track-w);
+  height: var(--switch-track-h);
+  margin: 0;
+  border: var(--border-base) solid var(--ivory-50);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  appearance: none;
+  cursor: inherit;
+}
+
+/* Knob, inset --space-1 from the outer edge of the track (the border is inside that inset) */
+.motion-toggle__input::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--space-1) - var(--border-base));
+  left: calc(var(--space-1) - var(--border-base));
+  width: var(--switch-knob);
+  height: var(--switch-knob);
+  border-radius: var(--radius-pill);
+  background: var(--ivory-50);
+}
+
+.motion-toggle__input:checked {
+  background: var(--ivory-50);
+}
+
+.motion-toggle__input:checked::before {
+  background: var(--navy-950);
+  transform: translateX(calc(var(--switch-track-w) - var(--switch-knob) - var(--space-1) * 2));
+}
+
+/* Forced off by the system: dashed track, input disabled, help line below (6.1) */
+.motion-toggle__input:disabled {
+  border-style: dashed;
+}
+
+.motion-toggle:has(.motion-toggle__input:disabled) {
+  cursor: default;
+}
+
+/* Focus ring around the label, drawn inside the chip as in 3.2 (an outer ivory ring would vanish on a light page) */
+.motion-toggle__input:focus-visible {
+  outline: none;
+}
+
+.motion-toggle:has(.motion-toggle__input:focus-visible) {
+  outline: var(--border-strong) solid var(--ivory-50);
+  outline-offset: calc(var(--border-strong) * -1);
+}
+
+/* State text: one of the two, chosen by the checked state (not colour alone: knob position and filled track too) */
+.motion-toggle__input:checked ~ .motion-toggle__state--off,
+.motion-toggle__input:not(:checked) ~ .motion-toggle__state--on {
+  display: none;
+}
+
+/* Help line while the system requests reduced motion: below the controls, right-aligned, on its own chip */
+.motion-help {
+  flex-basis: 100%;
+  max-width: 36ch;
+  margin-left: auto;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-box);
+  background: var(--overlay);
+  color: var(--on-dark);
+  font-size: var(--fs-meta);
+}
+
+/* 3.5 Gift card image wrapper: clips the glint of motion.css to the image, never over name or hint */
+.gift-card__art {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-image);
+}
+
+/* 3.16 Workshop props: colours only through the tokens, strokes in user units (scale with the drawing) */
+.envelope,
+.seal,
+.gift,
+.trail {
+  overflow: visible;
+}
+
+.envelope__back,
+.envelope__front,
+.envelope__flap {
+  fill: var(--paper);
+  stroke: var(--gold-500);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.envelope__liner {
+  fill: var(--cranberry-700);
+}
+
+/* The flap opens upwards around its top edge (finale); resting closed */
+.envelope__flap {
+  transform-box: fill-box;
+  transform-origin: center top;
+}
+
+.seal__half {
+  fill: var(--cranberry-700);
+  stroke: var(--cranberry-800);
+  stroke-width: 2;
+  transform-box: fill-box;
+}
+
+/* Resting on page 2: the seal is open, each half turned outwards around its lower outer point, the star visible */
+.seal__half--start {
+  transform-origin: left bottom;
+  transform: rotate(calc(var(--seal-open) * -1));
+}
+
+.seal__half--end {
+  transform-origin: right bottom;
+  transform: rotate(var(--seal-open));
+}
+
+.seal__motif {
+  fill: var(--gold-100);
+  stroke: var(--gold-500);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.gift__box {
+  fill: var(--cranberry-700);
+}
+
+.gift__lid-top {
+  fill: var(--cranberry-800);
+}
+
+.gift__ribbon,
+.gift__bow > * {
+  fill: var(--gold-100);
+  stroke: var(--gold-500);
+  stroke-width: 2;
+}
+
+.gift__glow {
+  fill: var(--ivory-50);
+}
+
+/* Resting in the result: lid open around its lower left corner */
+.gift__lid {
+  transform-box: fill-box;
+  transform-origin: left bottom;
+  transform: translateY(calc(var(--space-4) * -1)) rotate(var(--lid-open));
+}
+
+/* Light trail: only visible while it is drawn (motion.css); geometry per entry from js/motion-scenes.js */
+.trail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.trail__path {
+  fill: none;
+  stroke: var(--gold-500);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+/* Placement. The envelope is held in front of Santa's envelope hand: its right edge at the right edge of Santa's own
+   envelope (42 % of the figure width), its centre at 30 % of the figure height (DESIGN_GUIDELINE 3.16). Deviation
+   (AB#254): 3.16 puts the right edge at the area's left edge (24 %); in the desktop column (about 460 px) that leaves
+   about 110 px, less than --envelope-w, so the envelope would sit on the column edge and the light trail would have
+   no length. The figure is drawn with object-fit: contain, right bottom, so its size follows from the column
+   (container units) and the image ratio 384 x 498 (0.771 wide per high, 1.297 high per wide). The envelope never
+   leaves the column. */
+.envelope-anchor {
+  --figure-w: min(100cqw, 77.1cqh);
+  --figure-h: min(129.7cqw, 100cqh);
+  position: absolute;
+  top: calc(100cqh - var(--figure-h) * 0.7);
+  right: min(calc(var(--figure-w) * 0.58), calc(100cqw - var(--envelope-w)));
+  width: var(--envelope-w);
+  transform: translateY(-50%);
+}
+
+/* The seal sits on the tip of the flap (80 / 64 of the 160 x 112 drawing) */
+.seal {
+  position: absolute;
+  top: 57%;
+  left: 50%;
+  width: var(--seal-size);
+  margin: calc(var(--seal-size) / -2) 0 0 calc(var(--seal-size) / -2);
+}
+
+/* Without Santa (image did not load): top left in the column, at the height of the summary (set by motion-scenes.js) */
+.decor.has-no-santa .envelope-anchor {
+  top: var(--summary-y, var(--space-10));
+  right: auto;
+  left: 0;
+}
+
+/* The opening gift: in front of the gift cluster, bottom left of the column */
+.gift {
+  position: absolute;
+  bottom: var(--space-10);
+  left: var(--space-6);
+  width: var(--gift-w);
+}
+
+/* Envelope and seal only on page 2 (the finale fades them out in the result), the gift only in the result */
+.panel:not([data-state="email"]) .envelope-anchor {
+  opacity: 0;
+}
+
+.panel:not([data-state="result"]) .gift {
+  display: none;
+}
+
+@media (width >= 768px) {
+  .decor {
+    container-type: size;
+  }
+}
+
+/* Stacked cards (components.css): the image wrapper takes the place of the image in the subgrid */
+@media (width < 1024px) {
+  .gift-card__art {
+    grid-row: 1 / 3;
+  }
+}
+
+/* Mobile: Santa is centred at 40 % width after the content (layout.css); the envelope sits left of his envelope hand,
+   no trail (no side-by-side relation, DESIGN_GUIDELINE 6.4). Below 768 the label of the switch is visually hidden. */
+@media (width < 768px) {
+  .decor {
+    container-type: inline-size;
+  }
+
+  .envelope-anchor {
+    top: calc(129.7cqw * 0.4 * 0.3);
+    right: min(calc(100cqw - 30cqw - 40cqw * 0.42), calc(100cqw - var(--envelope-w-sm)));
+    width: var(--envelope-w-sm);
+  }
+
+  .seal {
+    width: var(--seal-size-sm);
+    margin: calc(var(--seal-size-sm) / -2) 0 0 calc(var(--seal-size-sm) / -2);
+  }
+
+  .gift {
+    bottom: var(--space-6);
+    left: var(--space-4);
+    width: var(--gift-w-sm);
+  }
+
+  .trail {
+    display: none;
+  }
+
+  .motion-toggle__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .motion-toggle {
+    padding: var(--space-1) var(--space-3);
+  }
+}
+
+/* Below 360 px only the track (knob position and fill carry the state) */
+@media (width < 360px) {
+  .motion-toggle__state {
+    display: none;
+  }
+}

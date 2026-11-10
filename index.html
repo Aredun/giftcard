@@ -10,7 +10,9 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/workshop.css">
   <link rel="stylesheet" href="css/motion.css">
+  <link rel="stylesheet" href="css/motion-scenes.css">
   <!-- Workshop photo: only the file of the matching breakpoint is preloaded (ASSET_SPEC 6, same media as layout.css) -->
   <link rel="preload" as="image" type="image/webp" href="assets/hero-workshop-1920.webp" media="(width >= 1280px)">
   <link rel="preload" as="image" type="image/webp" href="assets/hero-workshop-1280.webp" media="(768px <= width < 1280px)">
@@ -21,11 +23,22 @@
   <!-- Static texts are the Spanish default (fallback, R57); js/i18n.js holds all three languages and replaces them. -->
   <header class="site-header">
     <p class="wordmark"><span>ULTEBRA<span class="wordmark__long"> Solutions S.L.</span></span></p>
-    <div class="lang" role="group" aria-label="Idioma" data-i18n-attr="aria-label:lang_label">
-      <button class="lang__btn" type="button" lang="de" aria-pressed="false">DE</button>
-      <button class="lang__btn" type="button" lang="en" aria-pressed="false">EN</button>
-      <button class="lang__btn" type="button" lang="es" aria-pressed="true">ES</button>
+    <div class="header-controls">
+      <!-- Animation switch (DESIGN_GUIDELINE 3.15, MOTION_ADDENDUM 2): name = stable label, state = checked; the visible
+           state text is aria-hidden. The choice lives only in memory (js/motion.js). -->
+      <label class="motion-toggle">
+        <input id="motion-toggle" class="motion-toggle__input" type="checkbox" role="switch" checked>
+        <span class="motion-toggle__label" data-i18n="motion_label">Animaciones</span>
+        <span class="motion-toggle__state motion-toggle__state--on" aria-hidden="true" data-i18n="motion_on">Activadas</span>
+        <span class="motion-toggle__state motion-toggle__state--off" aria-hidden="true" data-i18n="motion_off">Desactivadas</span>
+      </label>
+      <div class="lang" role="group" aria-label="Idioma" data-i18n-attr="aria-label:lang_label">
+        <button class="lang__btn" type="button" lang="de" aria-pressed="false">DE</button>
+        <button class="lang__btn" type="button" lang="en" aria-pressed="false">EN</button>
+        <button class="lang__btn" type="button" lang="es" aria-pressed="true">ES</button>
+      </div>
     </div>
+    <p id="motion-help" class="motion-help" data-i18n="motion_system_help" hidden>Las animaciones están desactivadas por el ajuste de movimiento reducido de tu sistema.</p>
   </header>
 
   <main id="main" class="site-main">
@@ -62,19 +75,19 @@
           <div class="cards" role="radiogroup" aria-labelledby="choose-heading">
             <div class="gift-card" role="radio" aria-checked="false" tabindex="0" data-giftcard-id="amazon" aria-labelledby="card-name-amazon">
               <span class="gift-card__check" aria-hidden="true"><svg class="icon"><use href="assets/ui-icons.svg#icon-check"/></svg></span>
-              <img class="gift-card__img" src="assets/giftcard-amazon.svg" alt="" width="320" height="188">
+              <span class="gift-card__art"><img class="gift-card__img" src="assets/giftcard-amazon.svg" alt="" width="320" height="188"></span>
               <span id="card-name-amazon" class="gift-card__name">Amazon</span>
               <span class="gift-card__hint" aria-hidden="true"><span class="gift-card__hint-idle" data-i18n="card_hint">Elegir tarjeta</span><span class="gift-card__hint-selected" data-i18n="card_selected">Seleccionada</span></span>
             </div>
             <div class="gift-card" role="radio" aria-checked="false" tabindex="-1" data-giftcard-id="mediamarkt" aria-labelledby="card-name-mediamarkt">
               <span class="gift-card__check" aria-hidden="true"><svg class="icon"><use href="assets/ui-icons.svg#icon-check"/></svg></span>
-              <img class="gift-card__img" src="assets/giftcard-mediamarkt.svg" alt="" width="320" height="188">
+              <span class="gift-card__art"><img class="gift-card__img" src="assets/giftcard-mediamarkt.svg" alt="" width="320" height="188"></span>
               <span id="card-name-mediamarkt" class="gift-card__name">MediaMarkt</span>
               <span class="gift-card__hint" aria-hidden="true"><span class="gift-card__hint-idle" data-i18n="card_hint">Elegir tarjeta</span><span class="gift-card__hint-selected" data-i18n="card_selected">Seleccionada</span></span>
             </div>
             <div class="gift-card" role="radio" aria-checked="false" tabindex="-1" data-giftcard-id="el-corte-ingles" aria-labelledby="card-name-el-corte-ingles">
               <span class="gift-card__check" aria-hidden="true"><svg class="icon"><use href="assets/ui-icons.svg#icon-check"/></svg></span>
-              <img class="gift-card__img" src="assets/giftcard-el-corte-ingles.svg" alt="" width="320" height="188">
+              <span class="gift-card__art"><img class="gift-card__img" src="assets/giftcard-el-corte-ingles.svg" alt="" width="320" height="188"></span>
               <span id="card-name-el-corte-ingles" class="gift-card__name">El Corte Inglés</span>
               <span class="gift-card__hint" aria-hidden="true"><span class="gift-card__hint-idle" data-i18n="card_hint">Elegir tarjeta</span><span class="gift-card__hint-selected" data-i18n="card_selected">Seleccionada</span></span>
             </div>
@@ -167,6 +180,36 @@
       <div class="decor" aria-hidden="true">
         <img class="decor__santa" src="assets/santa-host-640.webp" srcset="assets/santa-host-384.webp 384w, assets/santa-host-640.webp 640w, assets/santa-host-960.webp 960w" sizes="(min-width: 1024px) 460px, (min-width: 768px) 300px, 40vw" width="384" height="498" alt="" loading="lazy" decoding="async">
         <img class="decor__gifts" src="assets/gift-cluster-640.webp" srcset="assets/gift-cluster-384.webp 384w, assets/gift-cluster-640.webp 640w, assets/gift-cluster-960.webp 960w" sizes="(min-width: 1024px) 380px, (min-width: 768px) 300px, 58vw" width="384" height="196" alt="" decoding="async">
+        <!-- Workshop props (DESIGN_GUIDELINE 3.16): inline so their parts can move; colours only from workshop.css.
+             Resting picture = end state: page 2 envelope closed with the seal open, result gift with the lid open. -->
+        <svg class="trail" focusable="false" aria-hidden="true"><path class="trail__path" pathLength="1" d="M0 0"/></svg>
+        <div class="envelope-anchor">
+          <svg class="envelope" viewBox="0 0 160 112" focusable="false" aria-hidden="true">
+            <rect class="envelope__back" x="4" y="4" width="152" height="104" rx="6"/>
+            <path class="envelope__liner" d="M4 4h152L80 62z"/>
+            <path class="envelope__front" d="M4 108V36l76 42 76-42v72z"/>
+            <path class="envelope__flap" d="M4 4h152L80 64z"/>
+          </svg>
+          <svg class="seal" viewBox="0 0 48 48" focusable="false" aria-hidden="true">
+            <path class="seal__motif" d="M24 14l2.5 6.6 7 .3-5.5 4.4 1.9 6.8L24 28.2l-5.9 3.9 1.9-6.8-5.5-4.4 7-.3z"/>
+            <path class="seal__half seal__half--start" d="M24 3Q14 3 9 9 2 15 4 24 2 33 9 39q5 6 15 6z"/>
+            <path class="seal__half seal__half--end" d="M24 3q10 0 15 6 7 6 5 15 2 9-5 15-5 6-15 6z"/>
+          </svg>
+        </div>
+        <svg class="gift" viewBox="0 0 160 160" focusable="false" aria-hidden="true">
+          <ellipse class="gift__glow" cx="80" cy="70" rx="50" ry="14"/>
+          <rect class="gift__box" x="24" y="72" width="112" height="80" rx="6"/>
+          <rect class="gift__ribbon" x="72" y="72" width="16" height="80"/>
+          <g class="gift__lid">
+            <rect class="gift__lid-top" x="16" y="52" width="128" height="24" rx="4"/>
+            <rect class="gift__ribbon" x="72" y="52" width="16" height="24"/>
+            <g class="gift__bow">
+              <path d="M80 52C64 30 46 38 60 50z"/>
+              <path d="M80 52c16-22 34-14 20-2z"/>
+              <circle cx="80" cy="50" r="6"/>
+            </g>
+          </g>
+        </svg>
         <div class="confetti"></div>
       </div>
     </div>

@@ -1,12 +1,14 @@
 /*
- * Giftcard2 motion (DESIGN_GUIDELINE 6, DESIGN_SPEC 7, R56): snow sparkle behind the panel, state fade, check mark,
- * finale confetti in the decoration column. Durations and distances only from tokens.css (slow sparkle = multiples of
- * --dur-finale). With prefers-reduced-motion: no particles, no confetti, no translate, no scale (base.css shortens
- * every remaining animation, js/motion.js creates no particles).
+ * Giftcard2 motion – the workshop storyboard (DESIGN_GUIDELINE 6, MOTION_ADDENDUM, DECISIONS V5-V7; AB#254).
+ * Part 1: background, switch, state fade, page 1 (entrance, hover, selection); page 2, result and copy are in
+ * motion-scenes.css. Every rule is scoped to :root[data-motion="on"], which js/motion.js sets from the switch and the
+ * system setting: switching off (or no JS) leaves the resting picture of workshop.css, the end state of every animation.
+ * Animations run only towards that state (from-keyframes, fill-mode backwards, never forwards).
+ * Each scene class (is-arriving, is-presenting, ...) gives its element exactly one own animation that lasts the whole
+ * sequence; js/motion.js removes the class on that animation's end. Durations, delays, distances only from tokens.css.
  */
 
-/* Snow sparkle: small dots on a fixed layer behind header, panel and footer, so they only show outside the opaque
-   panel; they twinkle in place (no drift, no parallax). Position, size and timing per dot come from js/motion.js. */
+/* ---------- Background (6.7): snow sparkle on a fixed layer behind the panel, twinkling in place ---------- */
 .snow {
   position: fixed;
   inset: 0;
@@ -24,12 +26,15 @@
   border-radius: var(--radius-pill);
   background: var(--ivory-50);
   opacity: 0;
-  animation: sparkle calc(var(--dur-finale) * var(--slow)) var(--ease-out) calc(var(--dur-finale) * var(--wait)) infinite;
 }
 
 .snow__dot.is-large {
   width: var(--space-2);
   height: var(--space-2);
+}
+
+:root[data-motion="on"] .snow__dot {
+  animation: sparkle calc(var(--dur-finale) * var(--slow)) var(--ease-out) calc(var(--dur-finale) * var(--wait)) infinite;
 }
 
 @keyframes sparkle {
@@ -43,9 +48,26 @@
   }
 }
 
-/* State change: fade in and rise by --shift-state; focus is set at once by app.js, not after the animation */
-.state.is-entering {
-  animation: state-in var(--dur-state) var(--ease-out);
+/* A scene that has no visible motion of its own on its element: the clock that marks the end of the sequence */
+@keyframes scene-clock {
+  from {
+    visibility: inherit;
+  }
+
+  to {
+    visibility: inherit;
+  }
+}
+
+/* ---------- Switch knob and fill (3.15): --dur-fast while motion is on, a jump when it is off ---------- */
+:root[data-motion="on"] .motion-toggle__input,
+:root[data-motion="on"] .motion-toggle__input::before {
+  transition: background-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+/* ---------- Plain state fade (back, change, reset; section fade of every state) ---------- */
+:root[data-motion="on"] .state.is-entering {
+  animation: state-in var(--dur-state) var(--ease-out) backwards;
 }
 
 @keyframes state-in {
@@ -53,64 +75,220 @@
     opacity: 0;
     transform: translateY(var(--shift-state));
   }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
 }
 
-/* Selection: the check badge scales 0.8 -> 1 when it appears */
-.gift-card[aria-checked="true"] .gift-card__check {
-  animation: check-in var(--dur-check) var(--ease-out);
+/* ---------- 6.2 Page 1 entrance, once per page load (--dur-entry) ---------- */
+:root[data-motion="on"] .panel.is-arriving {
+  animation: panel-arrive var(--dur-entry) var(--ease-out) backwards;
 }
 
-@keyframes check-in {
-  from {
-    transform: scale(0.8);
-  }
-
-  to {
-    transform: none;
-  }
-}
-
-/* Finale: small confetti pieces burst from the gift cluster inside the decoration column (never over the code or
-   the copy button, never clickable) and are gone after --dur-finale. */
-.confetti {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.confetti__piece {
-  position: absolute;
-  bottom: 30%;
-  left: 50%;
-  width: var(--space-2);
-  height: var(--space-3);
-  border-radius: var(--border-thin);
-  background: var(--piece-colour);
-  opacity: 0;
-  animation: confetti var(--dur-finale) var(--ease-out) forwards;
-}
-
-@keyframes confetti {
+/* 0-400 ms: panel fades in and rises; the rest of the sequence is carried by its children */
+@keyframes panel-arrive {
   0% {
-    opacity: 1;
-    transform: translate(0, 0) rotate(0);
+    opacity: 0;
+    transform: translateY(var(--shift-entry));
   }
 
-  80% {
+  40%,
+  100% {
     opacity: 1;
+    transform: none;
+  }
+}
+
+/* 300-900 ms: the three cards rise and fade in, 400 ms each, same motion, only the delay differs (--stagger) */
+:root[data-motion="on"] .panel.is-arriving .gift-card {
+  animation: card-arrive calc(var(--dur-entry) * 0.4) var(--ease-out) calc(var(--dur-entry) * 0.3) backwards;
+}
+
+:root[data-motion="on"] .panel.is-arriving .gift-card:nth-child(2) {
+  animation-delay: calc(var(--dur-entry) * 0.3 + var(--stagger));
+}
+
+:root[data-motion="on"] .panel.is-arriving .gift-card:nth-child(3) {
+  animation-delay: calc(var(--dur-entry) * 0.3 + var(--stagger) * 2);
+}
+
+@keyframes card-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(var(--shift-entry));
+  }
+}
+
+/* Santa as a whole figure, turning around his feet (6.0 rule 6) */
+:root[data-motion="on"] .decor__santa {
+  transform-origin: 70% 100%;
+  animation: santa-idle var(--dur-idle) var(--ease-in-out) var(--dur-entry) infinite;
+}
+
+/* 200-700 ms Santa slides in from the right; 700-1000 ms greeting: a nod, then a lean towards the cards */
+:root[data-motion="on"] .panel.is-arriving .decor__santa {
+  animation: santa-arrive var(--dur-entry) var(--ease-out) backwards;
+}
+
+@keyframes santa-arrive {
+  0%,
+  20% {
+    opacity: 0;
+    transform: translateX(var(--shift-santa));
+  }
+
+  70% {
+    opacity: 1;
+    transform: none;
+    animation-timing-function: var(--ease-in-out);
+  }
+
+  77.5% {
+    transform: rotate(calc(var(--tilt-santa) * -1));
+  }
+
+  85% {
+    transform: none;
+  }
+
+  92.5% {
+    transform: rotate(calc(var(--tilt-santa) * -1));
   }
 
   100% {
-    opacity: 0;
-    transform: translate(calc(var(--dx) * var(--space-10)), calc(var(--dy) * var(--space-10))) rotate(var(--turn));
+    transform: none;
   }
 }
 
+/* Idle on pages 1 and 2: one breath (--dur-breath = 20 % of the --dur-idle cycle), then a long rest */
+@keyframes santa-idle {
+  0%,
+  20%,
+  100% {
+    transform: none;
+  }
+
+  10% {
+    transform: scale(var(--scale-breath));
+  }
+}
+
+/* ---------- 6.2 Card hover / keyboard focus (--dur-hover): lift and a glint across the image only ---------- */
+:root[data-motion="on"] .gift-card {
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+
+:root[data-motion="on"] .gift-card:focus-visible,
+:root[data-motion="on"] .gift-card:active {
+  transform: translateY(calc(var(--lift-card) * -1));
+}
+
+:root[data-motion="on"] .gift-card__art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, var(--ivory-50) 50%, transparent 65%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+:root[data-motion="on"] .gift-card:focus-visible .gift-card__art::after {
+  animation: glint var(--dur-hover) var(--ease-out);
+}
+
+@media (hover: hover) {
+  :root[data-motion="on"] .gift-card:hover {
+    transform: translateY(calc(var(--lift-card) * -1));
+  }
+
+  :root[data-motion="on"] .gift-card:hover .gift-card__art::after {
+    animation: glint var(--dur-hover) var(--ease-out);
+  }
+}
+
+@keyframes glint {
+  from {
+    opacity: 0.6;
+    transform: translateX(-100%);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* ---------- 6.2 Card selection (--dur-select); the information (border, badge, hint) switches at once ---------- */
+/* 0-300 ms: the motif wiggles like a gift around its bottom centre, with the glint */
+:root[data-motion="on"] .gift-card__art.is-wiggling {
+  transform-origin: 50% 100%;
+  animation: gift-wiggle calc(var(--dur-select) * 2 / 3) var(--ease-out);
+}
+
+/* Own keyframe name and the specificity of the hover / focus rules (later wins): under the pointer or the focus ring
+   the glint would otherwise keep the name "glint" and never restart on a selection */
+:root[data-motion="on"] .gift-card .gift-card__art.is-wiggling::after {
+  animation: glint-select calc(var(--dur-select) * 2 / 3) var(--ease-out);
+}
+
+@keyframes glint-select {
+  from {
+    opacity: 0.6;
+    transform: translateX(-100%);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes gift-wiggle {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  25% {
+    transform: rotate(calc(var(--tilt-gift) * -1));
+  }
+
+  55% {
+    transform: rotate(var(--tilt-gift));
+  }
+
+  80% {
+    transform: rotate(calc(var(--tilt-gift) / -2));
+  }
+}
+
+/* 150-290 ms: the check badge is stamped like a seal */
+:root[data-motion="on"] .gift-card__check.is-stamped {
+  animation: stamp var(--dur-check) var(--ease-pop) calc(var(--dur-select) / 3) backwards;
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: scale(var(--scale-stamp)) rotate(var(--tilt-stamp));
+  }
+}
+
+/* 200-450 ms: Santa's small hop (beats the entrance if a card is chosen while he arrives) */
+:root[data-motion="on"] .panel .decor__santa.is-hopping {
+  animation: santa-hop var(--dur-select) var(--ease-out);
+}
+
+@keyframes santa-hop {
+  0%,
+  44%,
+  100% {
+    transform: none;
+  }
+
+  72% {
+    transform: translateY(calc(var(--hop-santa) * -1));
+  }
+}
+
+/* Safety net (6.1): the system setting also forces motion off in js/motion.js; base.css shortens the rest */
 @media (prefers-reduced-motion: reduce) {
   .snow,
   .confetti {
@@ -118,7 +296,7 @@
   }
 
   .state.is-entering,
-  .gift-card[aria-checked="true"] .gift-card__check {
+  .transfer {
     animation: none;
   }
 }

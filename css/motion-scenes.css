@@ -1,0 +1,307 @@
+/*
+ * Giftcard2 motion, part 2 (DESIGN_GUIDELINE 6.3-6.6; AB#254): the motif flying into the summary, envelope / light
+ * trail / seal on page 2, the result finale and the copy stamp. Same rules as motion.css: every animation is scoped to
+ * :root[data-motion="on"], runs only towards the resting picture of workshop.css, one scene class = one own animation
+ * on its element for the whole sequence (js/motion.js ends it). The keyframes stamp and scene-clock live in motion.css.
+ */
+
+/* ---------- 6.3 Transfer: a copy of the chosen motif flies into the summary (--dur-transfer) ---------- */
+.transfer {
+  position: absolute;
+  top: var(--transfer-y);
+  left: var(--transfer-x);
+  z-index: 1;
+  width: var(--transfer-w);
+  max-width: none;
+  border-radius: var(--radius-image);
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+
+:root[data-motion="on"] .transfer {
+  animation: transfer var(--dur-transfer) var(--ease-out) backwards;
+}
+
+@keyframes transfer {
+  from {
+    transform: translate(var(--transfer-dx), var(--transfer-dy)) scale(var(--transfer-scale));
+  }
+}
+
+/* "Change" is always drawn above the flying copy, on the surface it already sits on */
+:root[data-motion="on"] .summary .link-btn {
+  position: relative;
+  z-index: 2;
+  background: var(--surface);
+}
+
+/* ---------- 6.4 Page 2: envelope, light trail, seal surprise – one timeline capped at --dur-email-entry ---------- */
+:root[data-motion="on"] .decor.is-presenting {
+  animation: scene-clock var(--dur-email-entry) linear;
+}
+
+/* 200-1000 ms: the envelope rises out of Santa's envelope hand */
+:root[data-motion="on"] .decor.is-presenting .envelope {
+  transform-origin: 100% 50%;
+  animation: envelope-rise var(--dur-envelope) var(--ease-out) var(--dur-state) backwards;
+}
+
+@keyframes envelope-rise {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* 200-600 ms: Santa leans towards it */
+:root[data-motion="on"] .panel .decor.is-presenting .decor__santa {
+  animation: santa-lean calc(var(--dur-state) * 2) var(--ease-in-out) var(--dur-state);
+}
+
+@keyframes santa-lean {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  50% {
+    transform: rotate(calc(var(--tilt-santa) * -1));
+  }
+}
+
+/* 300-900 ms the gold trail draws from the column edge to the envelope, 900-1100 ms it fades out */
+:root[data-motion="on"] .decor.is-presenting .trail {
+  animation: trail-draw var(--dur-email-entry) var(--ease-out);
+}
+
+:root[data-motion="on"] .decor.is-presenting .trail__path {
+  animation: trail-path var(--dur-email-entry) var(--ease-out);
+}
+
+@keyframes trail-draw {
+  0%,
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes trail-path {
+  0%,
+  27% {
+    stroke-dashoffset: 1;
+  }
+
+  82%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 400-540 ms the wax seal is stamped onto the flap tip */
+:root[data-motion="on"] .decor.is-presenting .seal {
+  animation: stamp var(--dur-check) var(--ease-pop) calc(var(--dur-state) * 2) backwards;
+}
+
+/* 600-900 ms the two halves turn apart (towards their resting, open position) */
+:root[data-motion="on"] .decor.is-presenting .seal__half {
+  animation: seal-open calc(var(--dur-seal) * 3 / 7) var(--ease-pop) calc(var(--dur-state) * 3) backwards;
+}
+
+@keyframes seal-open {
+  from {
+    transform: none;
+  }
+}
+
+/* 800-1100 ms the star behind them pops */
+:root[data-motion="on"] .decor.is-presenting .seal__motif {
+  animation: star-pop calc(var(--dur-seal) * 3 / 7) var(--ease-pop) calc(var(--dur-state) * 4) backwards;
+}
+
+@keyframes star-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* ---------- 6.5 Result: one timeline capped at --dur-finale; code and "Copy" are there from the first frame ---------- */
+:root[data-motion="on"] .decor.is-finale {
+  animation: scene-clock var(--dur-finale) linear;
+}
+
+/* 0-700 ms the code box opens: a gold outline draws from the centre outwards and settles; the code never moves */
+:root[data-motion="on"] .codebox.is-revealing {
+  position: relative;
+  animation: scene-clock var(--dur-reveal) linear;
+}
+
+:root[data-motion="on"] .codebox.is-revealing::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--border-base) * -1);
+  border: var(--border-base) solid var(--gold-500);
+  border-radius: var(--radius-card);
+  opacity: 0;
+  pointer-events: none;
+  animation: codebox-open var(--dur-reveal) var(--ease-out);
+}
+
+@keyframes codebox-open {
+  0% {
+    opacity: 1;
+    clip-path: inset(0 50%);
+    transform: scale(0.98);
+  }
+
+  80% {
+    opacity: 1;
+    clip-path: inset(0);
+    transform: none;
+  }
+
+  100% {
+    opacity: 0;
+    clip-path: inset(0);
+    transform: none;
+  }
+}
+
+/* 0-400 ms in the column: the envelope of page 2 opens its flap, the seal pulses, both fade out from 150 ms */
+:root[data-motion="on"] .decor.is-finale .envelope-anchor {
+  animation: envelope-leave calc(var(--dur-state) * 2) var(--ease-out);
+}
+
+@keyframes envelope-leave {
+  0%,
+  37.5% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+:root[data-motion="on"] .decor.is-finale .envelope__flap {
+  animation: flap-open calc(var(--dur-state) * 2) var(--ease-out);
+}
+
+@keyframes flap-open {
+  0% {
+    transform: none;
+  }
+
+  75%,
+  100% {
+    transform: scaleY(-1);
+  }
+}
+
+:root[data-motion="on"] .decor.is-finale .seal {
+  animation: seal-pulse calc(var(--dur-state) * 1.5) var(--ease-out);
+}
+
+@keyframes seal-pulse {
+  50% {
+    transform: scale(calc((1 + var(--scale-stamp)) / 2));
+  }
+}
+
+/* 150-400 ms the gift rises into its place */
+:root[data-motion="on"] .decor.is-finale .gift {
+  animation: gift-rise calc(var(--dur-state) * 1.25) var(--ease-out) calc(var(--dur-state) * 0.75) backwards;
+}
+
+@keyframes gift-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--shift-entry));
+  }
+}
+
+/* 400-800 ms the lid opens (towards its resting, open position) and the glow inside shines up */
+:root[data-motion="on"] .decor.is-finale .gift__lid {
+  animation: lid-open calc(var(--dur-state) * 2) var(--ease-pop) calc(var(--dur-state) * 2) backwards;
+}
+
+@keyframes lid-open {
+  from {
+    transform: none;
+  }
+}
+
+:root[data-motion="on"] .decor.is-finale .gift__glow {
+  animation: glow-up calc(var(--dur-state) * 2) var(--ease-out) calc(var(--dur-state) * 2) backwards;
+}
+
+@keyframes glow-up {
+  from {
+    opacity: 0;
+  }
+}
+
+/* 450-900 ms the confetti burst from the opening of the gift, inside the decoration column only (never clickable) */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confetti__piece {
+  position: absolute;
+  bottom: calc(var(--space-10) + var(--gift-w) * 0.6);
+  left: calc(var(--space-6) + var(--gift-w) / 2);
+  width: var(--space-2);
+  height: var(--space-3);
+  border-radius: var(--border-thin);
+  background: var(--piece-colour);
+  opacity: 0;
+}
+
+:root[data-motion="on"] .confetti__piece {
+  animation: confetti calc(var(--dur-finale) / 2) var(--ease-out) calc(var(--dur-finale) / 2) backwards;
+}
+
+@keyframes confetti {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--dx) * var(--space-10)), calc(var(--dy) * var(--space-10))) rotate(var(--turn));
+  }
+}
+
+/* ---------- 6.6 Copy (--dur-copy, only after a successful copy) ---------- */
+:root[data-motion="on"] .status__ok .icon.is-stamped {
+  animation: stamp var(--dur-copy) var(--ease-pop) backwards;
+}
+
+:root[data-motion="on"] .codebox.is-flashing {
+  animation: codebox-flash var(--dur-copy) var(--ease-out);
+}
+
+@keyframes codebox-flash {
+  50% {
+    border-color: var(--pine-700);
+  }
+}
+
+/* Mobile: the confetti start at the smaller gift */
+@media (width < 768px) {
+  .confetti__piece {
+    bottom: calc(var(--space-6) + var(--gift-w-sm) * 0.6);
+    left: calc(var(--space-4) + var(--gift-w-sm) / 2);
+  }
+}
