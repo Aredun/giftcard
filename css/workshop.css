@@ -306,26 +306,13 @@
     display: none;
   }
 
-  /* Same pattern as .visually-hidden (base.css); a utility class cannot be applied per breakpoint in plain CSS */
-  .motion-toggle__label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
-    border: 0;
-  }
-
+  /* The visible label stays on phones (AB#259); the chip is only tighter */
   .motion-toggle {
     padding: var(--space-1) var(--space-3);
   }
 }
 
-/* Below 360 px only the track (knob position and fill carry the state) */
+/* Below 360 px the state text goes (knob position and fill carry the state); the label "Animations" stays */
 @media (width < 360px) {
   .motion-toggle__state {
     display: none;
