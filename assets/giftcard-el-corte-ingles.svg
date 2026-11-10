@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 188" role="img" aria-labelledby="t d">
+  <title id="t">Neutrales Motiv für die El-Corte-Inglés-Auswahl</title><desc id="d">Grüne Geschenkkarte mit ECI und Schleife, kein offizielles Markenlogo.</desc>
+  <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#1f4b3b"/><stop offset="1" stop-color="#3a745e"/></linearGradient></defs>
+  <rect x="4" y="4" width="312" height="180" rx="24" fill="url(#g)" stroke="#d5af62" stroke-width="4"/>
+  <path d="M160 5v178M4 86h312" stroke="#f5dfad" stroke-width="10" opacity=".92"/>
+  <path d="M160 86c-34-9-54-38-35-49 18-10 35 20 35 49Zm0 0c34-9 54-38 35-49-18-10-35 20-35 49Z" fill="none" stroke="#f5dfad" stroke-width="8"/>
+  <circle cx="160" cy="112" r="30" fill="#fff9ee"/><text x="160" y="121" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" font-weight="800" fill="#1f4b3b">ECI</text>
+</svg>
