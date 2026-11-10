@@ -9,12 +9,18 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/motion.css">
+  <!-- Workshop photo: only the file of the matching breakpoint is preloaded (ASSET_SPEC 6, same media as layout.css) -->
+  <link rel="preload" as="image" type="image/webp" href="assets/hero-workshop-1920.webp" media="(min-width: 1280px)">
+  <link rel="preload" as="image" type="image/webp" href="assets/hero-workshop-1280.webp" media="(min-width: 768px) and (max-width: 1279px)">
+  <link rel="preload" as="image" type="image/webp" href="assets/hero-workshop-768.webp" media="(max-width: 767px)">
   <script type="module" src="js/app.js"></script>
 </head>
 <body>
   <!-- Static texts are the Spanish default (fallback, R57); js/i18n.js holds all three languages and replaces them. -->
   <header class="site-header">
-    <p class="wordmark">ULTEBRA Solutions S.L.</p>
+    <p class="wordmark"><span>ULTEBRA<span class="wordmark__long"> Solutions S.L.</span></span></p>
     <div class="lang" role="group" aria-label="Idioma" data-i18n-attr="aria-label:lang_label">
       <button class="lang__btn" type="button" lang="de" aria-pressed="false">DE</button>
       <button class="lang__btn" type="button" lang="en" aria-pressed="false">EN</button>
@@ -138,6 +144,14 @@
             <button id="reset" class="btn btn--secondary" type="button" data-i18n="reset">Elegir otra opción</button>
           </div>
         </section>
+      </div>
+
+      <!-- Decoration (DESIGN_GUIDELINE 3.14): Santa in choose and e-mail (lazy, ASSET_SPEC 6), gift cluster with the finale
+           in the result (loaded with the page, so it is there when the finale starts) -->
+      <div class="decor" aria-hidden="true">
+        <img class="decor__santa" src="assets/santa-host-640.webp" srcset="assets/santa-host-384.webp 384w, assets/santa-host-640.webp 640w, assets/santa-host-960.webp 960w" sizes="(min-width: 1024px) 460px, (min-width: 768px) 300px, 40vw" width="384" height="498" alt="" loading="lazy" decoding="async">
+        <img class="decor__gifts" src="assets/gift-cluster-640.webp" srcset="assets/gift-cluster-384.webp 384w, assets/gift-cluster-640.webp 640w, assets/gift-cluster-960.webp 960w" sizes="(min-width: 1024px) 380px, (min-width: 768px) 300px, 58vw" width="384" height="196" alt="" decoding="async">
+        <div class="confetti"></div>
       </div>
     </div>
   </main>

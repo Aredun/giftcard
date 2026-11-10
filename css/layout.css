@@ -1,0 +1,151 @@
+/*
+ * Giftcard2 layout (DESIGN_GUIDELINE 3.1, 3.3, 3.14, 4; DESIGN_SPEC 6; ASSET_SPEC 3, 5-7): workshop photo frame,
+ * header chips, 7/5 panel composition with the decoration column (Santa, gift cluster in the result state),
+ * tablet and mobile. Values only from tokens.css; image paths relative to this file.
+ */
+
+/* 3.1 Frame: workshop photo behind everything, --photo-fallback while / if it does not load. One file per
+   breakpoint, so the browser loads only the matching one (ASSET_SPEC 3, 6). No text lies directly on the photo. */
+body {
+  background-color: var(--photo-fallback);
+  background-image: url("../assets/hero-workshop-1920.webp");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (max-width: 1279px) {
+  body {
+    background-image: url("../assets/hero-workshop-1280.webp");
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    background-image: url("../assets/hero-workshop-768.webp");
+  }
+}
+
+/* Landmarks above the snow layer of motion.css */
+.site-header,
+.site-main,
+.site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* 3.1 Header: brand and language switch each on an --overlay chip, text --on-dark (contrast 11.21:1 worst case) */
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-height: calc(var(--target-min) + var(--space-1) * 2);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--overlay);
+  color: var(--on-dark);
+}
+
+/* 3.3 / 4 Panel: 12-column grid on desktop, content spans 7, decoration 5 */
+.panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto 1fr;
+  column-gap: var(--space-6);
+}
+
+.progress {
+  grid-column: 1 / span 7;
+  grid-row: 1;
+}
+
+.content {
+  grid-column: 1 / span 7;
+  grid-row: 2;
+  min-width: 0;
+}
+
+/* 3.14 Decoration column: spans the full panel height down to the panel edge (the figure stands on it); the images
+   are positioned inside it, so they never make the panel taller than its content and never lie behind a button. */
+.decor {
+  position: relative;
+  grid-column: 8 / span 5;
+  grid-row: 1 / span 2;
+  min-height: 0;
+  margin-right: calc(var(--space-10) * -1);
+  margin-bottom: calc(var(--space-10) * -1);
+  overflow: hidden;
+  border-bottom-right-radius: var(--radius-panel);
+  pointer-events: none;
+}
+
+.decor__santa,
+.decor__gifts {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+/* Gift cluster: at most 36 % of the panel width on desktop (ASSET_SPEC 3); the column is 5/12 of the panel */
+.decor__gifts {
+  width: 84%;
+  height: auto;
+  bottom: var(--space-10);
+}
+
+/* Santa in choose and e-mail, the gift cluster in the result state (master design) */
+.panel[data-state="result"] .decor__santa,
+.panel:not([data-state="result"]) .decor__gifts {
+  display: none;
+}
+
+/* Tablet 768-1023: decoration column narrower (4 of 12), smaller figure; three 210 px cards never fit next to it,
+   so the cards are stacked there (components.css, DESIGN_GUIDELINE 2.6) */
+@media (max-width: 1023px) {
+  .progress,
+  .content {
+    grid-column: 1 / span 8;
+  }
+
+  .decor {
+    grid-column: 9 / span 4;
+    margin-right: calc(var(--space-8) * -1);
+    margin-bottom: calc(var(--space-8) * -1);
+  }
+}
+
+/* Mobile < 768: one column; order progress, content, actions, decoration. Santa is a small decorative figure after
+   the content, the gift cluster at most 58 % of the panel width (ASSET_SPEC 3); nothing lies over the actions. */
+@media (max-width: 767px) {
+  .wordmark__long {
+    display: none;
+  }
+
+  .panel {
+    display: block;
+  }
+
+  .decor {
+    height: auto;
+    margin: var(--space-6) calc(var(--space-4) * -1) calc(var(--space-6) * -1);
+    border-radius: 0 0 var(--radius-panel-sm) var(--radius-panel-sm);
+  }
+
+  .decor__santa,
+  .decor__gifts {
+    position: static;
+    width: 40%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .decor__gifts {
+    width: 58%;
+    margin-bottom: var(--space-6);
+  }
+}

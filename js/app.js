@@ -8,6 +8,7 @@ import { createRadioGroup } from './radio-group.js';
 import { checkEmail, createEmailField, EMAIL_PROBLEMS } from './email.js';
 import { createCopyControl } from './clipboard.js';
 import { applyLanguage, detectLanguage, translate } from './i18n.js';
+import { celebrate, clearCelebration, enterState, initMotion } from './motion.js';
 
 const browserLanguages = globalThis.navigator?.languages;
 let language = detectLanguage(browserLanguages?.length ? browserLanguages : [globalThis.navigator?.language]);
@@ -27,6 +28,8 @@ const headings = {
   result: byId('result-heading'),
 };
 const steps = Array.from(document.querySelectorAll('.progress__step'));
+const panel = document.querySelector('.panel');
+const confetti = document.querySelector('.confetti');
 const continueButton = byId('continue');
 const form = byId('email-form');
 const input = byId('email');
@@ -85,8 +88,11 @@ let busy = false;
 let currentState = 'choose';
 
 function showState(name, { focus = true } = {}) {
+  const changed = name !== currentState;
   currentState = name;
   for (const state of STATES) sections[state].hidden = state !== name;
+  // The decoration column follows the state (layout.css): Santa in choose / e-mail, gift cluster in the result.
+  panel.dataset.state = name;
   const active = STATES.indexOf(name);
   steps.forEach((step, index) => {
     step.classList.toggle('is-active', index === active);
@@ -96,6 +102,10 @@ function showState(name, { focus = true } = {}) {
     step.querySelector('.progress__status').hidden = index >= active;
   });
   if (focus) headings[name].focus();
+  if (!changed) return;
+  enterState(sections[name]);
+  if (name === 'result') celebrate(confetti);
+  else clearCelebration(confetti);
 }
 
 function showSummary(card) {
@@ -197,4 +207,5 @@ window.addEventListener('pageshow', (event) => {
 });
 
 setLanguage(language);
+initMotion();
 resetAll({ focus: false });

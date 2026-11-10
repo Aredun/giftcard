@@ -1,0 +1,124 @@
+/*
+ * Giftcard2 motion (DESIGN_GUIDELINE 6, DESIGN_SPEC 7, R56): snow sparkle behind the panel, state fade, check mark,
+ * finale confetti in the decoration column. Durations and distances only from tokens.css (slow sparkle = multiples of
+ * --dur-finale). With prefers-reduced-motion: no particles, no confetti, no translate, no scale (base.css shortens
+ * every remaining animation, js/motion.js creates no particles).
+ */
+
+/* Snow sparkle: small dots on a fixed layer behind header, panel and footer, so they only show outside the opaque
+   panel; they twinkle in place (no drift, no parallax). Position, size and timing per dot come from js/motion.js. */
+.snow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.snow__dot {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: var(--space-1);
+  height: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--ivory-50);
+  opacity: 0;
+  animation: sparkle calc(var(--dur-finale) * var(--slow)) var(--ease-out) calc(var(--dur-finale) * var(--wait)) infinite;
+}
+
+.snow__dot.is-large {
+  width: var(--space-2);
+  height: var(--space-2);
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+/* State change: fade in and rise by --shift-state; focus is set at once by app.js, not after the animation */
+.state.is-entering {
+  animation: state-in var(--dur-state) var(--ease-out);
+}
+
+@keyframes state-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--shift-state));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Selection: the check badge scales 0.8 -> 1 when it appears */
+.gift-card[aria-checked="true"] .gift-card__check {
+  animation: check-in var(--dur-check) var(--ease-out);
+}
+
+@keyframes check-in {
+  from {
+    transform: scale(0.8);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+/* Finale: small confetti pieces burst from the gift cluster inside the decoration column (never over the code or
+   the copy button, never clickable) and are gone after --dur-finale. */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confetti__piece {
+  position: absolute;
+  bottom: 30%;
+  left: 50%;
+  width: var(--space-2);
+  height: var(--space-3);
+  border-radius: var(--border-thin);
+  background: var(--piece-colour);
+  opacity: 0;
+  animation: confetti var(--dur-finale) var(--ease-out) forwards;
+}
+
+@keyframes confetti {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0);
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--dx) * var(--space-10)), calc(var(--dy) * var(--space-10))) rotate(var(--turn));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snow,
+  .confetti {
+    display: none;
+  }
+
+  .state.is-entering,
+  .gift-card[aria-checked="true"] .gift-card__check {
+    animation: none;
+  }
+}

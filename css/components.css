@@ -1,7 +1,7 @@
 /*
  * Giftcard2 components (DESIGN_GUIDELINE 3): panel, progress, gift card radio, buttons, field, summary, notice,
- * code box, status line, eyebrow / intro / trust line. Values only from tokens.css. Layout of the 7/5 composition,
- * photo and decoration follow in layout.css / motion.css (own card).
+ * code box, status line, eyebrow / intro / trust line. Values only from tokens.css. The 7/5 composition, photo and
+ * decoration are in layout.css, motion in motion.css.
  */
 
 /* 3.3 Panel */
@@ -457,22 +457,19 @@
   .panel {
     padding: var(--space-8);
   }
-}
 
-@media (max-width: 767px) {
-  .panel {
-    padding: var(--space-6) var(--space-4);
-    border-radius: var(--radius-panel-sm);
-  }
-
+  /* Stacked cards from tablet down: next to the 4/12 decoration column three 210 px cards never fit (2.6, 3.5).
+     The image gives way first, so a brand name (min-content) never breaks inside a word at 320 px; the cards share
+     their columns (subgrid), so all three images keep the same size (R53). */
   .cards {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, var(--card-img-sm)) minmax(min-content, 1fr);
     gap: var(--space-4);
   }
 
   .gift-card {
     display: grid;
-    grid-template-columns: var(--card-img-sm) minmax(0, 1fr);
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
     grid-template-rows: auto auto;
     column-gap: var(--space-4);
     align-items: center;
@@ -496,6 +493,13 @@
 
   .gift-card[aria-checked="true"] .gift-card__hint-selected {
     display: inline;
+  }
+}
+
+@media (max-width: 767px) {
+  .panel {
+    padding: var(--space-6) var(--space-4);
+    border-radius: var(--radius-panel-sm);
   }
 
   .actions .btn:last-child {
