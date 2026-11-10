@@ -139,16 +139,13 @@ async function generate(event) {
     return;
   }
 
+  const email = input.value;
+  let code;
   setBusy(true);
+  // Only the hash computation is guarded: an error in the result rendering below must surface in the console,
+  // not be shown as the browser notice.
   try {
-    const email = input.value;
-    const code = await computeCode(email, card.giftcardId);
-    // The person may have gone back, changed the card or edited the e-mail while hashing: show no stale result.
-    if (currentState !== 'email' || radioGroup.value() !== card.giftcardId || input.value !== email) return;
-    copyControl.reset();
-    codeElement.textContent = code;
-    byId('result-name').textContent = card.name;
-    showState('result');
+    code = await computeCode(email, card.giftcardId);
   } catch (error) {
     // Any unexpected failure of the hash computation (e.g. subtle.digest rejecting) gets the same browser notice,
     // so the person is never left on step 2 without feedback.
@@ -156,9 +153,17 @@ async function generate(event) {
     if (unexpected || error.reason === ERROR_REASONS.WEB_CRYPTO_UNAVAILABLE) cryptoError.hidden = false;
     else if (error.reason === ERROR_REASONS.EMPTY_EMAIL) showEmailError('email_empty');
     else showState('choose');
+    return;
   } finally {
     setBusy(false);
   }
+
+  // The person may have gone back, changed the card or edited the e-mail while hashing: show no stale result.
+  if (currentState !== 'email' || radioGroup.value() !== card.giftcardId || input.value !== email) return;
+  copyControl.reset();
+  codeElement.textContent = code;
+  byId('result-name').textContent = card.name;
+  showState('result');
 }
 
 // Fresh start: no selection, no e-mail, no code (also after back/forward cache or browser form restore).
