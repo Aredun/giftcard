@@ -54,7 +54,7 @@ select {
 input,
 textarea,
 select {
-  font-size: max(var(--font-size-form), 1em);
+  font-size: max(var(--fs-body), 1em);
 }
 
 button {
@@ -71,11 +71,11 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-body);
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
+  background: var(--ivory-50);
+  color: var(--navy-950);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   overflow-wrap: break-word;
 }
 
@@ -83,11 +83,12 @@ h1,
 h2,
 h3 {
   font-family: var(--font-heading);
-  line-height: var(--line-height-heading);
+  line-height: var(--lh-tight);
 }
 
 h1 {
-  font-size: var(--font-size-h1);
+  font-size: var(--fs-h1);
+  letter-spacing: -0.035em;
 }
 
 p {
@@ -101,54 +102,66 @@ samp {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--cranberry-700);
 }
 
 a:hover {
-  color: var(--color-primary-active);
+  color: var(--cranberry-800);
 }
 
-/* Focus ring: at least 3 px, high contrast on light and dark surfaces */
+/* Focus ring (DESIGN_GUIDELINE 5.2): 3 px outline, 2 px offset; cranberry on light, ivory on dark surfaces */
 :focus {
   outline: none;
 }
 
 :focus-visible {
-  outline: var(--focus-ring-width) solid var(--color-focus);
-  outline-offset: var(--focus-ring-offset);
-  box-shadow: 0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-width)) var(--color-focus-halo);
+  outline: var(--border-strong) solid var(--cranberry-700);
+  outline-offset: var(--focus-offset);
 }
 
-/* Landmarks and safe areas */
+.site-footer :focus-visible {
+  outline-color: var(--ivory-50);
+}
+
+/* Landmarks and safe areas (DESIGN_GUIDELINE 3.1, 4): gutters --space-6, mobile --space-3, safe areas added */
 .site-header,
 .site-main,
 .site-footer {
   width: 100%;
-  padding-left: max(var(--space-gutter), env(safe-area-inset-left));
-  padding-right: max(var(--space-gutter), env(safe-area-inset-right));
+  padding-left: calc(var(--space-6) + env(safe-area-inset-left, 0px));
+  padding-right: calc(var(--space-6) + env(safe-area-inset-right, 0px));
 }
 
 .site-header {
-  padding-top: max(var(--space-4), env(safe-area-inset-top));
+  padding-top: calc(var(--space-4) + env(safe-area-inset-top, 0px));
   padding-bottom: var(--space-4);
 }
 
 .site-main {
   flex: 1 0 auto;
-  padding-top: var(--space-5);
-  padding-bottom: var(--space-6);
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-8);
 }
 
 .site-footer {
-  padding-top: var(--space-5);
-  padding-bottom: max(var(--space-5), env(safe-area-inset-bottom));
+  padding-top: var(--space-6);
+  padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
   background: var(--navy-950);
-  color: var(--color-on-dark);
-  font-size: var(--font-size-small);
+  color: var(--on-dark);
+  font-size: var(--fs-meta);
+}
+
+@media (max-width: 767px) {
+  .site-header,
+  .site-main,
+  .site-footer {
+    padding-left: calc(var(--space-3) + env(safe-area-inset-left, 0px));
+    padding-right: calc(var(--space-3) + env(safe-area-inset-right, 0px));
+  }
 }
 
 .wordmark {
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--fw-heavy);
   letter-spacing: 0.04em;
 }
 
@@ -166,12 +179,14 @@ a:hover {
   border: 0;
 }
 
+/* Notice (DESIGN_GUIDELINE 3.9); moves to components.css with AB#245 */
 .notice {
   max-width: var(--measure);
-  padding: var(--space-4) var(--space-5);
-  border: var(--border-hairline) solid var(--color-ornament);
-  border-radius: var(--radius-card);
-  background: var(--color-surface);
+  padding: var(--space-4);
+  border-left: var(--border-accent) solid var(--gold-500);
+  background: var(--gold-100);
+  color: var(--navy-950);
+  font-size: var(--fs-meta);
 }
 
 .notice p + p {

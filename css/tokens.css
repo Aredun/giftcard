@@ -1,78 +1,94 @@
 /*
- * Giftcard2 design tokens – the only place for colour, type, radius and shadow values.
- * Source: concept/requirements/DESIGN_SPEC.md 5 (shadow and spacing values from MASTER_DESIGN.html).
+ * Giftcard2 design tokens – the only place for colour, type, spacing, radius, border, shadow, size and motion values.
+ * Source: specification/DESIGN_GUIDELINE.md 2 (exactly these custom properties; (M) = from the master).
  * Other stylesheets use only var(--…) from this file.
  */
 :root {
-  /* Colours – DESIGN_SPEC 5 "Farben" */
-  --navy-950: #10192B;      /* main text, footer, dark surfaces */
-  --navy-800: #233654;      /* secondary text, selected card */
-  --ivory-50: #FFF9EE;      /* page background */
-  --paper: #FFFCF7;         /* panel, cards */
-  --cranberry-700: #8E2940; /* primary action, focus accent */
-  --cranberry-800: #6F1E31; /* hover, pressed */
-  --pine-700: #285B48;      /* success, calm accents */
-  --gold-500: #C99A42;      /* sparse ornamental lines, never body text */
-  --danger-700: #A5262F;    /* errors with icon and text */
+  /* 2.1 Colours */
+  --navy-950: #10192B;                /* primary text, footer, dark surfaces, header chip */
+  --navy-800: #233654;                /* secondary headings, selected-card accent text */
+  --ivory-50: #FFF9EE;                /* page background, focus ring on dark */
+  --paper: #FFFCF7;                   /* panel surface (opaque) */
+  --surface: #FFFFFF;                 /* (M) raised surfaces inside the panel */
+  --cranberry-700: #8E2940;           /* primary action, active step, eyebrow, focus ring on light, selected border */
+  --cranberry-800: #6F1E31;           /* hover / pressed of the primary action */
+  --pine-700: #285B48;                /* success */
+  --gold-500: #C99A42;                /* thin ornamental lines only – never text */
+  --danger-700: #A5262F;              /* error text, border, icon */
+  --text-secondary: #4D586B;          /* (M) intro, longer secondary text */
+  --text-muted: #667085;              /* (M) small meta text */
+  --line: #E7DCC8;                    /* (M) decorative dividers, non-interactive borders */
+  --line-strong: #7A7F88;             /* (M, corrected) borders that identify a control */
+  --gold-100: #FFF7E7;                /* (M) notice surface */
+  --gold-300: #D7C59D;                /* (M) code box border (decorative) */
+  --step-idle: #E9E4DA;               /* (M) circle of an idle step */
+  --overlay: rgb(16 25 43 / 0.85);    /* (M) navy chip behind white text on the photo */
+  --photo-fallback: #5B3A2C;          /* background while / if the workshop photo does not load */
+  --on-dark: #FFFFFF;                 /* text on cranberry, pine, navy, overlay */
 
-  /* Semantic aliases */
-  --color-bg: var(--ivory-50);
-  --color-surface: var(--paper);
-  --color-text: var(--navy-950);
-  --color-text-muted: var(--navy-800);
-  --color-primary: var(--cranberry-700);
-  --color-primary-active: var(--cranberry-800);
-  --color-success: var(--pine-700);
-  --color-ornament: var(--gold-500);
-  --color-danger: var(--danger-700);
-  --color-on-dark: var(--paper);
-  --color-focus: var(--cranberry-700);
-  --color-focus-halo: var(--paper);
-
-  /* Type – DESIGN_SPEC 5 "Typografie" (no external fonts; Inter only if a licensed local file is delivered) */
+  /* 2.2 Typography (no external fonts; Inter only if a licensed local file is delivered) */
   --font-heading: Georgia, Cambria, "Times New Roman", serif;
-  --font-body: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-code: ui-monospace, "SFMono-Regular", Consolas, monospace;
-  --font-size-h1: clamp(2.125rem, 1.25rem + 2.8vw, 3.5rem); /* 34–40 px mobile … 48–56 px desktop */
-  --font-size-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* 16–18 px */
-  --font-size-form: 1rem;                                     /* at least 16 px in forms */
-  --font-size-small: 0.875rem;
-  --line-height-body: 1.55;
-  --line-height-heading: 1.12;
-  --font-weight-strong: 700;
-  --measure: 68ch;                                            /* max text width */
+  --fs-h1: clamp(2.125rem, 1.25rem + 3vw, 3.5rem);
+  --fs-h2: 2rem;
+  --fs-lead: 1.125rem;
+  --fs-body: 1rem;
+  --fs-meta: 0.875rem;
+  --fs-eyebrow: 0.8125rem;
+  --fs-code: clamp(1.25rem, 0.9rem + 1.5vw, 1.875rem);
+  --fw-regular: 400;
+  --fw-bold: 700;
+  --fw-heavy: 800;
+  --lh-tight: 1.06;
+  --lh-body: 1.5;
+  --measure: 68ch;
 
-  /* Radius – DESIGN_SPEC 5 "Form und Tiefe" */
+  /* 2.3 Spacing (4 px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 48px;
+
+  /* 2.4 Radii, borders, shadows, sizes */
   --radius-panel: 28px;
+  --radius-panel-sm: 24px;
   --radius-card: 18px;
+  --radius-box: 16px;
+  --radius-image: 12px;
+  --radius-field: 12px;
   --radius-pill: 999px;
+  --border-thin: 1px;
+  --border-base: 2px;
+  --border-strong: 3px;
+  --border-accent: 4px;
+  --shadow-panel: 0 30px 80px rgb(16 25 43 / 0.33);
+  --shadow-selected: 0 12px 36px rgb(142 41 64 / 0.14);
+  --shadow-primary: 0 8px 24px rgb(142 41 64 / 0.20);
+  --panel-max: 1120px;
+  --control-h: 48px;
+  --target-min: 44px;
+  --focus-offset: 2px;
+  --step-size: 28px;
+  --check-size: 30px;
+  --icon: 20px;
+  --icon-sm: 16px;
+  --summary-img: 108px;
+  --card-img-sm: 110px;
+  --field-max: 36rem;
+  --codebox-max: 41rem;
 
-  /* Borders and shadow */
-  --border-hairline: 1px;
-  --border-selected: 3px;
-  --shadow-panel: 0 24px 70px rgb(16 25 43 / 14%); /* soft shadow, navy-950 at 14 % */
-
-  /* Sizes */
-  --panel-max-width: 1120px;
-  --button-min-height: 48px;
-  --touch-target-min: 44px;
-  --focus-ring-width: 3px;
-  --focus-ring-offset: 3px;
-
-  /* Spacing */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
-  --space-7: 3rem;
-  --space-gutter: clamp(1rem, 4vw, 4.5rem);
-
-  /* Motion – DESIGN_SPEC 7 */
-  --duration-panel: 200ms;
-  --duration-check: 140ms;
-  --duration-confetti-max: 900ms;
-  --duration-reduced-max: 90ms;
-  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  /* 2.5 Motion */
+  --dur-state: 200ms;
+  --dur-check: 140ms;
+  --dur-fast: 90ms;
+  --dur-finale: 900ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --shift-state: 8px;
 }
