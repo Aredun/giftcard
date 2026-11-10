@@ -116,16 +116,19 @@ async function generate(event) {
 
   setBusy(true);
   try {
-    const code = await computeCode(input.value, card.giftcardId);
-    // The person may have gone back or changed the card while hashing: show no stale result.
-    if (currentState !== 'email' || radioGroup.value() !== card.giftcardId) return;
+    const email = input.value;
+    const code = await computeCode(email, card.giftcardId);
+    // The person may have gone back, changed the card or edited the e-mail while hashing: show no stale result.
+    if (currentState !== 'email' || radioGroup.value() !== card.giftcardId || input.value !== email) return;
     copyControl.reset();
     codeElement.textContent = code;
     byId('result-name').textContent = card.name;
     showState('result');
   } catch (error) {
-    if (!(error instanceof CodeError)) throw error;
-    if (error.reason === ERROR_REASONS.WEB_CRYPTO_UNAVAILABLE) cryptoError.hidden = false;
+    // Any unexpected failure of the hash computation (e.g. subtle.digest rejecting) gets the same browser notice,
+    // so the person is never left on step 2 without feedback.
+    const unexpected = !(error instanceof CodeError);
+    if (unexpected || error.reason === ERROR_REASONS.WEB_CRYPTO_UNAVAILABLE) cryptoError.hidden = false;
     else if (error.reason === ERROR_REASONS.EMPTY_EMAIL) emailField.showError(TEXTS.emailEmpty);
     else showState('choose');
   } finally {
@@ -153,6 +156,10 @@ form.addEventListener('submit', generate);
 input.addEventListener('input', () => {
   if (input.getAttribute('aria-invalid') === 'true') emailField.clearError();
 });
-window.addEventListener('pageshow', () => resetAll({ focus: false }));
+// Only a page restored from the back/forward cache needs a reset here; a normal load is covered by the reset below
+// (pageshow fires after the images have loaded, by then the person may already be typing).
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) resetAll({ focus: false });
+});
 
 resetAll({ focus: false });
