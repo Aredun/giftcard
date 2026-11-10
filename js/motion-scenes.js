@@ -18,6 +18,7 @@ export function createScenes(elements) {
   const doc = panel.ownerDocument;
   let arrived = false;
   let transfer = null;
+  let cards = []; // the cards of the last selection, so leaving page 1 can end their reactions
 
   // Without Santa (image did not load) the envelope takes its fallback place (workshop.css)
   const noSanta = () => decor?.classList.add('has-no-santa');
@@ -36,8 +37,16 @@ export function createScenes(elements) {
     confetti?.replaceChildren();
   }
 
-  // Ends every page-2 / result piece (state change, motion off). Santa's idle keeps running.
+  function stopCard(card) {
+    stop(art(card));
+    stop(check(card));
+  }
+
+  // Ends every page-2 / result piece and the card reactions (state change, motion off). Santa's idle keeps running.
+  // The card reactions matter below 1024 px: page 1 is display: none there, which cancels a reaction without
+  // animationend, so its class would stay and replay on the way back (AUD6-01).
   function reset() {
+    cards.forEach(stopCard);
     removeTransfer();
     clearConfetti();
     stop(decor);
@@ -54,10 +63,9 @@ export function createScenes(elements) {
 
   // 6.2 Selection: the chosen card reacts, the previous card's reaction ends at once.
   function select(card, allCards = []) {
+    cards = allCards.includes(card) ? allCards : [...allCards, card].filter(Boolean);
     for (const other of allCards) {
-      if (other === card) continue;
-      stop(art(other));
-      stop(check(other));
+      if (other !== card) stopCard(other);
     }
     play(art(card), 'is-wiggling');
     play(check(card), 'is-stamped');

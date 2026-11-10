@@ -87,8 +87,11 @@ body {
     visibility: hidden;
   }
 
-  /* An explanation opened on another step does not count towards the shared height (only the steps' base content) */
-  .content > .state[hidden] .explain > :not(summary) {
+  /* An explanation opened or an error still shown on another step does not count towards the shared height (only the
+     steps' base content), e.g. the e-mail error after "Back" (REV254-07) */
+  .content > .state[hidden] .explain > :not(summary),
+  .content > .state[hidden] [role="alert"],
+  .content > .state[hidden] .notice--error {
     display: none;
   }
 }
