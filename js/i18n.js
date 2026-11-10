@@ -113,9 +113,9 @@ export const TEXTS = Object.freeze({
   // Explanation "How the selection works" (DESIGN_SPEC 9, extended version; DECISIONS S1: EN and ES are drafts)
   explain_title: { de: 'So funktioniert die Auswahl', en: 'How the selection works', es: 'Cómo funciona la selección' },
   explain_local: {
-    de: 'Deine E-Mail-Adresse wird nur in deinem Browser verarbeitet, um den Code zu berechnen; diese Seite speichert oder sendet sie nicht. Der Server, auf dem die Seite liegt (GitHub Pages), sieht wie bei jeder Webseite die normalen Seitenaufrufe, aber nie deine E-Mail-Adresse.',
-    en: 'Your email address is only processed in your browser to compute the code; this page does not store or send it. The host of the page (GitHub Pages) sees the normal page requests, as with any website, but never your email address.',
-    es: 'Tu correo electrónico solo se procesa en tu navegador para calcular el código; esta página no lo guarda ni lo envía. El alojamiento de la página (GitHub Pages) sí ve las solicitudes normales de la página, como ocurre en cualquier sitio web, pero nunca tu correo electrónico.',
+    de: 'Deine E-Mail-Adresse wird nur in deinem Browser verarbeitet, um den Code zu berechnen; diese Seite speichert oder sendet sie nicht. Beim Aufruf der Seite verarbeitet GitHub Pages normale Zugriffsdaten. Die hier eingegebene E-Mail-Adresse wird durch diese Anwendung nicht an GitHub Pages übertragen.',
+    en: 'Your email address is only processed in your browser to compute the code; this page does not store or send it. GitHub Pages processes normal access data when you visit the page. This application does not transmit the email address entered here to GitHub Pages.',
+    es: 'Tu correo electrónico solo se procesa en tu navegador para calcular el código; esta página no lo guarda ni lo envía. Al visitar la página, GitHub Pages trata los datos habituales de acceso. Esta aplicación no transmite a GitHub Pages la dirección de correo electrónico introducida aquí.',
   },
   explain_nocheck: {
     de: 'Diese statische Seite besitzt keine Mitarbeiterliste, Datenbank oder Anmeldung. Sie kann nicht feststellen, ob eine E-Mail-Adresse zu einer beschäftigten Person gehört. Der Code ist kein Identitäts- oder Sicherheitsnachweis.',
