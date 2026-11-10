@@ -304,7 +304,7 @@
 /* Mobile: Santa is centred at 40 % width after the content, at the top of the column (layout.css); the envelope sits
    next to him on the left, its right edge at the figure's left edge (30 % of the column), top edge on the figure's
    25 % line, so it lies at the height of his hand and never over face or beard. No trail (no side-by-side relation,
-   DESIGN_GUIDELINE 6.4). Below 768 the label of the switch is visually hidden. */
+   DESIGN_GUIDELINE 6.4). */
 @media (width < 768px) {
   .decor {
     container-type: inline-size;
