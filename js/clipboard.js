@@ -1,6 +1,7 @@
 // Copy the code (R25, DESIGN_SPEC 3 C, 10; DESIGN_GUIDELINE 3.10, 3.11).
-// Success: button label "Kopiert" and a spoken status line for at least 2 s. No clipboard or refused: the code is
-// focused and selected and "Bitte manuell kopieren" is announced. Nothing is stored or logged.
+// Success: button label "copied" and a spoken status line for at least 2 s. No clipboard or refused: the code is
+// focused and selected and "please copy manually" is announced. Texts come from the caller (i18n.js).
+// Nothing is stored or logged.
 
 const COPIED_VISIBLE_MS = 2500;
 const RE_ANNOUNCE_MS = 60;
@@ -42,6 +43,7 @@ export function createCopyControl({ button, label, codeElement, okLine, manualLi
     }, RE_ANNOUNCE_MS);
     label.textContent = texts.copied;
     timer = setTimeout(() => {
+      timer = null;
       label.textContent = texts.copy;
       okLine.hidden = true;
     }, COPIED_VISIBLE_MS);
@@ -71,6 +73,11 @@ export function createCopyControl({ button, label, codeElement, okLine, manualLi
     }
   }
 
+  // After a language switch: the label in the new language, "copied" only while the success state is still showing.
+  function relabel() {
+    label.textContent = timer ? texts.copied : texts.copy;
+  }
+
   button.addEventListener('click', copy);
-  return { reset };
+  return { reset, relabel };
 }

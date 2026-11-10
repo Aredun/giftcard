@@ -407,6 +407,51 @@
   font-weight: var(--fw-heavy);
 }
 
+/* 3.1 Header row and 3.2 language switch: brand left, switch right; pill group on the overlay chip, current
+   language aria-pressed + weight 800 + underline (not colour alone), each button at least 44 x 44 px */
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.lang {
+  display: inline-flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--overlay);
+}
+
+.lang__btn {
+  min-width: var(--target-min);
+  min-height: var(--target-min);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--on-dark);
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-regular);
+  cursor: pointer;
+}
+
+.lang__btn[aria-pressed="true"] {
+  font-weight: var(--fw-heavy);
+  text-decoration: underline;
+  text-decoration-thickness: var(--border-base);
+  text-underline-offset: var(--space-1);
+}
+
+/* Ivory ring on the dark chip (5.2); drawn inside the button, because the chip padding is narrower than ring plus
+   offset and an outer ivory ring would vanish on a light page background */
+.lang__btn:focus-visible {
+  outline-color: var(--ivory-50);
+  outline-offset: calc(var(--border-strong) * -1);
+}
+
 /* Breakpoints (DESIGN_GUIDELINE 2.6, 3.3, 3.5) */
 @media (max-width: 1023px) {
   .panel {

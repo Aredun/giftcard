@@ -1,19 +1,17 @@
 // Control only: state machine choose -> email -> result, wiring of the modules, focus management
 // (concept/ARCHITECTURE.md 3, DESIGN_SPEC 3, 10, 11). State lives only in variables and the DOM of this page:
-// no storage, no URL, no history state; a reload starts fresh. Texts: German for now (i18n follows on its own card).
+// no storage, no URL, no history state; a reload starts fresh. Texts come from js/i18n.js (DE / EN / ES, R57).
 
 import { findCard } from './cards.js';
 import { computeCode, isWebCryptoAvailable, CodeError, ERROR_REASONS } from './code.js';
 import { createRadioGroup } from './radio-group.js';
 import { checkEmail, createEmailField, EMAIL_PROBLEMS } from './email.js';
 import { createCopyControl } from './clipboard.js';
+import { applyLanguage, detectLanguage, translate } from './i18n.js';
 
-const TEXTS = Object.freeze({
-  emailEmpty: 'Bitte gib deine geschäftliche E-Mail-Adresse ein.',
-  emailImplausible: 'Bitte prüfe die E-Mail-Adresse – sie braucht genau ein „@“ und eine Domain wie name@firma.com.',
-  copy: 'Code kopieren',
-  copied: 'Kopiert',
-});
+const browserLanguages = globalThis.navigator?.languages;
+let language = detectLanguage(browserLanguages?.length ? browserLanguages : [globalThis.navigator?.language]);
+const t = (key) => translate(language, key);
 
 const STATES = ['choose', 'email', 'result'];
 const byId = (id) => document.getElementById(id);
@@ -53,8 +51,35 @@ const copyControl = createCopyControl({
   codeElement,
   okLine: byId('copy-ok'),
   manualLine: byId('copy-manual'),
-  texts: TEXTS,
+  texts: {
+    get copy() {
+      return t('copy');
+    },
+    get copied() {
+      return t('copied');
+    },
+  },
 });
+
+// Key of the e-mail error currently shown (or null), so a language switch can show it in the new language.
+let emailErrorKey = null;
+
+function showEmailError(key) {
+  emailErrorKey = key;
+  emailField.showError(t(key));
+}
+
+function clearEmailError() {
+  emailErrorKey = null;
+  emailField.clearError();
+}
+
+// Language switch (DESIGN_GUIDELINE 3.2): only texts change – e-mail value, chosen card, code and focus stay.
+function setLanguage(next) {
+  language = applyLanguage(document, next);
+  if (emailErrorKey) emailField.showError(t(emailErrorKey));
+  copyControl.relabel();
+}
 
 let busy = false;
 let currentState = 'choose';
@@ -103,11 +128,11 @@ async function generate(event) {
 
   const problem = checkEmail(input.value);
   if (problem) {
-    emailField.showError(problem === EMAIL_PROBLEMS.EMPTY ? TEXTS.emailEmpty : TEXTS.emailImplausible);
+    showEmailError(problem === EMAIL_PROBLEMS.EMPTY ? 'email_empty' : 'email_implausible');
     input.focus();
     return;
   }
-  emailField.clearError();
+  clearEmailError();
 
   if (!isWebCryptoAvailable()) {
     cryptoError.hidden = false;
@@ -129,7 +154,7 @@ async function generate(event) {
     // so the person is never left on step 2 without feedback.
     const unexpected = !(error instanceof CodeError);
     if (unexpected || error.reason === ERROR_REASONS.WEB_CRYPTO_UNAVAILABLE) cryptoError.hidden = false;
-    else if (error.reason === ERROR_REASONS.EMPTY_EMAIL) emailField.showError(TEXTS.emailEmpty);
+    else if (error.reason === ERROR_REASONS.EMPTY_EMAIL) showEmailError('email_empty');
     else showState('choose');
   } finally {
     setBusy(false);
@@ -141,6 +166,7 @@ function resetAll({ focus = true } = {}) {
   radioGroup.clear();
   continueButton.disabled = true;
   emailField.reset();
+  emailErrorKey = null;
   copyControl.reset();
   codeElement.textContent = '';
   byId('result-name').textContent = '';
@@ -154,12 +180,16 @@ byId('back').addEventListener('click', () => showState('choose'));
 byId('reset').addEventListener('click', () => resetAll());
 form.addEventListener('submit', generate);
 input.addEventListener('input', () => {
-  if (input.getAttribute('aria-invalid') === 'true') emailField.clearError();
+  if (input.getAttribute('aria-invalid') === 'true') clearEmailError();
 });
+for (const button of document.querySelectorAll('.lang__btn[lang]')) {
+  button.addEventListener('click', () => setLanguage(button.getAttribute('lang')));
+}
 // Only a page restored from the back/forward cache needs a reset here; a normal load is covered by the reset below
 // (pageshow fires after the images have loaded, by then the person may already be typing).
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) resetAll({ focus: false });
 });
 
+setLanguage(language);
 resetAll({ focus: false });
