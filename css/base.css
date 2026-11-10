@@ -179,20 +179,6 @@ a:hover {
   border: 0;
 }
 
-/* Notice (DESIGN_GUIDELINE 3.9); moves to components.css with AB#245 */
-.notice {
-  max-width: var(--measure);
-  padding: var(--space-4);
-  border-left: var(--border-accent) solid var(--gold-500);
-  background: var(--gold-100);
-  color: var(--navy-950);
-  font-size: var(--fs-meta);
-}
-
-.notice p + p {
-  margin-top: var(--space-2);
-}
-
 /* Reduced motion: states switch at once */
 @media (prefers-reduced-motion: reduce) {
   *,

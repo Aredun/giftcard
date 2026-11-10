@@ -1,13 +1,15 @@
 <!doctype html>
-<html lang="es">
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
-  <title>Tarjeta regalo de Navidad · ULTEBRA</title>
+  <title>Weihnachts-Giftcard · ULTEBRA</title>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script type="module" src="js/app.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -23,21 +25,119 @@
       </div>
     </noscript>
 
-    <section id="state-choose" class="state" aria-labelledby="state-choose-heading">
-      <h1 id="state-choose-heading" class="visually-hidden">Elige tu tarjeta regalo de Navidad</h1>
-    </section>
+    <div class="panel">
+      <ol class="progress" role="list" aria-label="Fortschritt">
+        <li class="progress__step is-active" aria-current="step" data-step="choose">
+          <span class="progress__dot"><span class="progress__num">1</span><svg class="icon progress__done" aria-hidden="true"><use href="assets/ui-icons.svg#icon-check"/></svg></span>
+          <span class="progress__label">Auswahl</span><span class="visually-hidden progress__status" hidden>, erledigt</span>
+        </li>
+        <li class="progress__step" data-step="email">
+          <span class="progress__dot"><span class="progress__num">2</span><svg class="icon progress__done" aria-hidden="true"><use href="assets/ui-icons.svg#icon-check"/></svg></span>
+          <span class="progress__label">E-Mail</span><span class="visually-hidden progress__status" hidden>, erledigt</span>
+        </li>
+        <li class="progress__step" data-step="result">
+          <span class="progress__dot"><span class="progress__num">3</span><svg class="icon progress__done" aria-hidden="true"><use href="assets/ui-icons.svg#icon-check"/></svg></span>
+          <span class="progress__label">Code</span><span class="visually-hidden progress__status" hidden>, erledigt</span>
+        </li>
+      </ol>
 
-    <section id="state-email" class="state" aria-labelledby="state-email-heading" hidden>
-      <h1 id="state-email-heading" class="visually-hidden">Generar código</h1>
-    </section>
+      <div class="content">
+        <section id="state-choose" class="state" aria-labelledby="choose-heading">
+          <p class="eyebrow">Frohe Weihnachten</p>
+          <h1 id="choose-heading" tabindex="-1">Wähle deine Weihnachts-Giftcard</h1>
+          <p class="intro">Drei Möglichkeiten, ein Geschenk von ULTEBRA. Deine Auswahl wird erst durch den separat übermittelten Code bearbeitet.</p>
 
-    <section id="state-result" class="state" aria-labelledby="state-result-heading" hidden>
-      <h1 id="state-result-heading" class="visually-hidden">Tu código de selección está listo</h1>
-    </section>
+          <div class="cards" role="radiogroup" aria-labelledby="choose-heading">
+            <div class="gift-card" role="radio" aria-checked="false" tabindex="0" data-giftcard-id="amazon" aria-labelledby="card-name-amazon">
+              <span class="gift-card__check" aria-hidden="true"><svg class="icon"><use href="assets/ui-icons.svg#icon-check"/></svg></span>
+              <img class="gift-card__img" src="assets/giftcard-amazon.svg" alt="" width="320" height="188">
+              <span id="card-name-amazon" class="gift-card__name">Amazon</span>
+              <span class="gift-card__hint" aria-hidden="true"><span class="gift-card__hint-idle">Giftcard auswählen</span><span class="gift-card__hint-selected">Ausgewählt</span></span>
+            </div>
+            <div class="gift-card" role="radio" aria-checked="false" tabindex="-1" data-giftcard-id="mediamarkt" aria-labelledby="card-name-mediamarkt">
+              <span class="gift-card__check" aria-hidden="true"><svg class="icon"><use href="assets/ui-icons.svg#icon-check"/></svg></span>
+              <img class="gift-card__img" src="assets/giftcard-mediamarkt.svg" alt="" width="320" height="188">
+              <span id="card-name-mediamarkt" class="gift-card__name">MediaMarkt</span>
+              <span class="gift-card__hint" aria-hidden="true"><span class="gift-card__hint-idle">Giftcard auswählen</span><span class="gift-card__hint-selected">Ausgewählt</span></span>
+            </div>
+            <div class="gift-card" role="radio" aria-checked="false" tabindex="-1" data-giftcard-id="el-corte-ingles" aria-labelledby="card-name-el-corte-ingles">
+              <span class="gift-card__check" aria-hidden="true"><svg class="icon"><use href="assets/ui-icons.svg#icon-check"/></svg></span>
+              <img class="gift-card__img" src="assets/giftcard-el-corte-ingles.svg" alt="" width="320" height="188">
+              <span id="card-name-el-corte-ingles" class="gift-card__name">El Corte Inglés</span>
+              <span class="gift-card__hint" aria-hidden="true"><span class="gift-card__hint-idle">Giftcard auswählen</span><span class="gift-card__hint-selected">Ausgewählt</span></span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="continue" class="btn" type="button" disabled>Weiter</button>
+          </div>
+          <p class="trust">Lokal im Browser · keine App-Speicherung · kein Login</p>
+        </section>
+
+        <section id="state-email" class="state" aria-labelledby="email-heading" hidden>
+          <p class="eyebrow">Schritt 2</p>
+          <h1 id="email-heading" tabindex="-1">Erzeuge deinen persönlichen Auswahlcode</h1>
+
+          <div class="summary">
+            <img id="summary-img" class="summary__img" src="assets/giftcard-amazon.svg" alt="" width="320" height="188">
+            <p class="summary__text">Deine Auswahl: <span id="summary-name"></span></p>
+            <button id="change" class="link-btn" type="button">Ändern</button>
+          </div>
+
+          <form id="email-form" class="email-form" novalidate>
+            <div class="field">
+              <label for="email">Deine geschäftliche E-Mail-Adresse</label>
+              <input id="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" autocapitalize="off" placeholder="name@unternehmen.com" aria-describedby="email-help">
+              <p id="email-help" class="field__help">Sie wird nur in diesem Browser zur Code-Erzeugung verwendet und von dieser Seite nicht gespeichert oder gesendet.</p>
+              <p id="email-error" class="field__error" role="alert" hidden><svg class="icon" aria-hidden="true"><use href="assets/ui-icons.svg#icon-shield"/></svg><span id="email-error-text"></span></p>
+            </div>
+
+            <div id="crypto-error" class="notice notice--error" role="alert" hidden>
+              <p>Dieser Browser kann den Code nicht sicher berechnen (Web Crypto fehlt). Bitte öffne die Seite in einem aktuellen Browser wie Firefox, Chrome, Edge oder Safari.</p>
+            </div>
+
+            <div class="actions">
+              <button id="back" class="btn btn--secondary" type="button">Zurück</button>
+              <button id="generate" class="btn" type="submit">Code erzeugen</button>
+            </div>
+          </form>
+
+          <div class="notice">
+            <p>Der Code bestätigt keine Identität und verhindert keine Mehrfachauswahl.</p>
+          </div>
+        </section>
+
+        <section id="state-result" class="state" aria-labelledby="result-heading" hidden>
+          <p class="eyebrow">Fertig</p>
+          <h1 id="result-heading" tabindex="-1">Dein Auswahlcode ist bereit</h1>
+          <p class="intro">Gewählte Giftcard: <strong id="result-name"></strong></p>
+
+          <div class="codebox">
+            <p id="code-label" class="codebox__label">Dein Code</p>
+            <code id="code-value" class="codebox__code" tabindex="-1"></code>
+            <button id="copy" class="btn codebox__btn" type="button"><svg class="icon" aria-hidden="true"><use href="assets/ui-icons.svg#icon-copy"/></svg><span id="copy-label">Code kopieren</span></button>
+            <div id="copy-status" class="status" role="status">
+              <p id="copy-ok" class="status__ok" hidden><svg class="icon" aria-hidden="true"><use href="assets/ui-icons.svg#icon-check"/></svg><span>Kopiert</span></p>
+              <p id="copy-manual" class="notice notice--error" hidden>Bitte manuell kopieren: Der Code ist markiert.</p>
+            </div>
+          </div>
+
+          <p class="next-step"><strong>Nächster Schritt:</strong> Sende diesen Code über den von ULTEBRA genannten Kanal. Erst die interne Bearbeitung macht deine Auswahl verbindlich.</p>
+          <div class="notice">
+            <p>Der Code dient der Zuordnung, nicht als Identitäts- oder Sicherheitsnachweis.</p>
+          </div>
+
+          <div class="actions">
+            <button id="reset" class="btn btn--secondary" type="button">Andere Auswahl treffen</button>
+          </div>
+        </section>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <p>ULTEBRA Solutions S.L.</p>
+    <p>Deine E-Mail wird in diesem Browser zur Code-Erzeugung verwendet. Diese Seite speichert oder sendet sie nicht. Der Code ist kein Identitäts- oder Sicherheitsnachweis.</p>
+    <p class="site-footer__brand">ULTEBRA Solutions S.L.</p>
   </footer>
 </body>
 </html>
