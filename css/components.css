@@ -159,13 +159,30 @@
   font-weight: var(--fw-bold);
 }
 
+/* Both hint texts share one cell, so the hint is always as tall as the longer one and selecting a card changes no
+   height (equal cards, FR06); only visibility switches. */
 .gift-card__hint {
+  display: grid;
   color: var(--text-muted);
   font-size: var(--fs-meta);
 }
 
+.gift-card__hint-idle,
 .gift-card__hint-selected {
-  display: none;
+  grid-area: 1 / 1;
+}
+
+.gift-card__hint-selected {
+  visibility: hidden;
+}
+
+/* The selected card says "Selected" at every width (FR05) */
+.gift-card[aria-checked="true"] .gift-card__hint-idle {
+  visibility: hidden;
+}
+
+.gift-card[aria-checked="true"] .gift-card__hint-selected {
+  visibility: visible;
 }
 
 .gift-card__check {
@@ -453,7 +470,7 @@
 }
 
 /* Breakpoints (DESIGN_GUIDELINE 2.6, 3.3, 3.5) */
-@media (max-width: 1023px) {
+@media (width < 1024px) {
   .panel {
     padding: var(--space-8);
   }
@@ -461,9 +478,12 @@
   /* Stacked cards from tablet down: next to the 4/12 decoration column three 210 px cards never fit (2.6, 3.5).
      The image gives way first, so a brand name (min-content) never breaks inside a word at 320 px; the cards share
      their columns (subgrid), so all three images keep the same size (R53). With subgrid the card's padding and border
-     come out of the first track, so its max holds them too and the image reaches --card-img-sm where there is room. */
+     come out of the first track, so its max holds them too and the image reaches --card-img-sm where there is room.
+     Equal rows (1fr): every card is as tall as the tallest, so a name that wraps at 320 px makes all three taller
+     together (FR06). */
   .cards {
     grid-template-columns: minmax(0, calc(var(--card-img-sm) + var(--space-5) + var(--border-base))) minmax(min-content, 1fr);
+    grid-auto-rows: 1fr;
     gap: var(--space-4);
   }
 
@@ -487,17 +507,9 @@
   .gift-card__hint {
     align-self: start;
   }
-
-  .gift-card[aria-checked="true"] .gift-card__hint-idle {
-    display: none;
-  }
-
-  .gift-card[aria-checked="true"] .gift-card__hint-selected {
-    display: inline;
-  }
 }
 
-@media (max-width: 767px) {
+@media (width < 768px) {
   .panel {
     padding: var(--space-6) var(--space-4);
     border-radius: var(--radius-panel-sm);
@@ -514,7 +526,7 @@
 }
 
 /* Below 360 px only the circles; the label stays as visually hidden text (DESIGN_GUIDELINE 3.4, D10) */
-@media (max-width: 359px) {
+@media (width < 360px) {
   .progress__label {
     position: absolute;
     width: 1px;

@@ -108,7 +108,7 @@ body {
 
 /* Tablet 768-1023: decoration column narrower (4 of 12), smaller figure; three 210 px cards never fit next to it,
    so the cards are stacked there (components.css, DESIGN_GUIDELINE 2.6) */
-@media (max-width: 1023px) {
+@media (width < 1024px) {
   .progress,
   .content {
     grid-column: 1 / span 8;
@@ -123,7 +123,7 @@ body {
 
 /* Mobile < 768: one column; order progress, content, actions, decoration. Santa is a small decorative figure after
    the content, the gift cluster at most 58 % of the panel width (ASSET_SPEC 3); nothing lies over the actions. */
-@media (max-width: 767px) {
+@media (width < 768px) {
   .wordmark__long {
     display: none;
   }

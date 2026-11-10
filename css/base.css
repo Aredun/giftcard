@@ -151,7 +151,7 @@ a:hover {
   font-size: var(--fs-meta);
 }
 
-@media (max-width: 767px) {
+@media (width < 768px) {
   .site-header,
   .site-main,
   .site-footer {
