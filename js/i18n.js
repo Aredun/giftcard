@@ -152,6 +152,12 @@ export function translate(language, key) {
   return entry[isLanguage(language) ? language : DEFAULT_LANGUAGE];
 }
 
+// Like translate, but an unknown key gives null instead of an error: applyLanguage uses it so that one key
+// missing in an old cached script cannot stop the translation of the rest of the page (AUD5-01).
+function lookup(language, key) {
+  return TEXTS[key] ? translate(language, key) : null;
+}
+
 // First supported language in the browser's preference list ("de-AT" -> "de"), otherwise Spanish.
 export function detectLanguage(preferred) {
   for (const tag of Array.isArray(preferred) ? preferred : []) {
@@ -169,14 +175,17 @@ export function detectLanguage(preferred) {
 export function applyLanguage(doc, language) {
   const lang = isLanguage(language) ? language : DEFAULT_LANGUAGE;
   doc.documentElement.lang = lang;
-  doc.title = `${translate(lang, 'title')} · ULTEBRA`;
+  const title = lookup(lang, 'title');
+  if (title !== null) doc.title = `${title} · ULTEBRA`;
   for (const element of doc.querySelectorAll('[data-i18n]')) {
-    element.textContent = translate(lang, element.dataset.i18n);
+    const text = lookup(lang, element.dataset.i18n);
+    if (text !== null) element.textContent = text;
   }
   for (const element of doc.querySelectorAll('[data-i18n-attr]')) {
     for (const pair of element.dataset.i18nAttr.split(';')) {
       const [attribute, key] = pair.split(':').map((part) => part.trim());
-      if (attribute && key) element.setAttribute(attribute, translate(lang, key));
+      const text = attribute && key ? lookup(lang, key) : null;
+      if (text !== null) element.setAttribute(attribute, text);
     }
   }
   for (const button of doc.querySelectorAll('.lang__btn[lang]')) {
