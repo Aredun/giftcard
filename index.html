@@ -104,7 +104,17 @@
           <h1 id="email-heading" tabindex="-1" data-i18n="email_heading">Genera tu código de selección personal</h1>
 
           <div class="summary">
-            <img id="summary-img" class="summary__img" src="assets/giftcard-amazon.svg" alt="" width="320" height="188">
+            <!-- Mobile only (workshop.css): a small wax seal on the summary image, so the seal surprise of 6.4 plays where
+                 the reader is (card 258); the column after the content is below the visible area on a phone.
+                 Same drawing as the seal in .decor below: change both together. -->
+            <span class="summary__art">
+              <img id="summary-img" class="summary__img" src="assets/giftcard-amazon.svg" alt="" width="320" height="188">
+              <svg class="seal summary__seal" viewBox="0 0 48 48" focusable="false" aria-hidden="true">
+                <path class="seal__motif" d="M24 14l2.5 6.6 7 .3-5.5 4.4 1.9 6.8L24 28.2l-5.9 3.9 1.9-6.8-5.5-4.4 7-.3z"/>
+                <path class="seal__half seal__half--start" d="M24 3Q14 3 9 9 2 15 4 24 2 33 9 39q5 6 15 6z"/>
+                <path class="seal__half seal__half--end" d="M24 3q10 0 15 6 7 6 5 15 2 9-5 15-5 6-15 6z"/>
+              </svg>
+            </span>
             <p class="summary__text"><span data-i18n="summary_label">Tu elección:</span> <span id="summary-name"></span></p>
             <button id="change" class="link-btn" type="button" data-i18n="change">Cambiar</button>
           </div>

@@ -129,6 +129,26 @@
   }
 }
 
+/* Mobile (card 258): the same seal surprise on the summary image, in view right after the step change; same times as
+   the column seal. The clock runs on every width so the scene class always ends; the seal only exists below 768 px. */
+:root[data-motion="on"] .summary.is-sealing {
+  animation: scene-clock var(--dur-email-entry) linear;
+}
+
+@media (width < 768px) {
+  :root[data-motion="on"] .summary.is-sealing .seal {
+    animation: stamp var(--dur-check) var(--ease-pop) calc(var(--dur-state) * 2) backwards;
+  }
+
+  :root[data-motion="on"] .summary.is-sealing .seal__half {
+    animation: seal-open calc(var(--dur-seal) * 3 / 7) var(--ease-pop) calc(var(--dur-state) * 3) backwards;
+  }
+
+  :root[data-motion="on"] .summary.is-sealing .seal__motif {
+    animation: star-pop calc(var(--dur-seal) * 3 / 7) var(--ease-pop) calc(var(--dur-state) * 4) backwards;
+  }
+}
+
 /* ---------- 6.5 Result: one timeline capped at --dur-finale; code and "Copy" are there from the first frame ---------- */
 :root[data-motion="on"] .decor.is-finale {
   animation: scene-clock var(--dur-finale) linear;

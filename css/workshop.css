@@ -274,6 +274,33 @@
   }
 }
 
+/* Summary seal (card 258): only on mobile, on the top right corner of the summary image – inside the summary's own
+   padding, never over its text, "Change" or the form. Hidden on tablet and desktop, where the column seal is in view. */
+.summary__art {
+  position: relative;
+  display: block;
+  flex: none;
+  line-height: 0;
+}
+
+.summary__art .summary__seal {
+  display: none;
+}
+
+/* Drawn above the flying motif copy (.transfer, z-index 1) once it has landed. A third of the seal overhangs the image
+   corner (the rest lies on the image), so it reads as stamped on the card and stays inside the summary padding. */
+@media (width < 768px) {
+  .summary__art .summary__seal {
+    display: block;
+    top: calc(var(--seal-size-sm) / -3);
+    right: calc(var(--seal-size-sm) / -3);
+    left: auto;
+    z-index: 2;
+    width: var(--seal-size-sm);
+    margin: 0;
+  }
+}
+
 /* Mobile: Santa is centred at 40 % width after the content, at the top of the column (layout.css); the envelope sits
    next to him on the left, its right edge at the figure's left edge (30 % of the column), top edge on the figure's
    25 % line, so it lies at the height of his hand and never over face or beard. No trail (no side-by-side relation,

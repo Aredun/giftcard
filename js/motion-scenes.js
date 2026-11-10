@@ -50,6 +50,7 @@ export function createScenes(elements) {
     removeTransfer();
     clearConfetti();
     stop(decor);
+    stop(summary);
     stop(santa);
     stop(codebox);
   }
@@ -152,6 +153,8 @@ export function createScenes(elements) {
     if (!isMotionOn(doc)) return;
     drawTrail();
     play(decor, 'is-presenting');
+    // Mobile: the column is below the visible area, so the seal also plays on the summary image (card 258, CSS only < 768)
+    play(summary, 'is-sealing');
     if (from) flyTransfer(from);
   }
 
