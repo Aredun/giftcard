@@ -460,9 +460,10 @@
 
   /* Stacked cards from tablet down: next to the 4/12 decoration column three 210 px cards never fit (2.6, 3.5).
      The image gives way first, so a brand name (min-content) never breaks inside a word at 320 px; the cards share
-     their columns (subgrid), so all three images keep the same size (R53). */
+     their columns (subgrid), so all three images keep the same size (R53). With subgrid the card's padding and border
+     come out of the first track, so its max holds them too and the image reaches --card-img-sm where there is room. */
   .cards {
-    grid-template-columns: minmax(0, var(--card-img-sm)) minmax(min-content, 1fr);
+    grid-template-columns: minmax(0, calc(var(--card-img-sm) + var(--space-5) + var(--border-base))) minmax(min-content, 1fr);
     gap: var(--space-4);
   }
 
